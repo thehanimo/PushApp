@@ -1,7 +1,9 @@
 const passport = require("passport");
-const LinkedInStrategy = require("passport-linkedin-oauth2").Strategy;
+const LinkedInStrategy = require("@sokratis/passport-linkedin-oauth2").Strategy;
 const keys = require('./keys');
 
+passport.initialize();
+passport.session();
 passport.use(new LinkedInStrategy({
     clientID: keys.linkedIn.clientID,
     clientSecret: keys.linkedIn.clientSecret,
@@ -14,8 +16,9 @@ passport.use(new LinkedInStrategy({
         "email-address",
         "location",
     ],
-scope: ["r_liteprofile", "r_emailaddress"],
+    scope: ['r_emailaddress', 'r_liteprofile'],
   }, function(accessToken, refreshToken, profile, done) {
+      console.log(profile)
     // asynchronous verification, for effect...
     process.nextTick(function () {
       // To keep the example simple, the user's LinkedIn profile is returned to
