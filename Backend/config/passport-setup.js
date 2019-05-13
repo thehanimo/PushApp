@@ -6,9 +6,16 @@ passport.use(new LinkedInStrategy({
     clientID: keys.linkedIn.clientID,
     clientSecret: keys.linkedIn.clientSecret,
     callbackURL: "http://localhost:3000/auth/linkedin/callback",
-    scope: ['r_emailaddress', 'r_basicprofile'],
+    profileFields: [
+        "formatted-name",
+        "headline",
+        "id",
+        "public-profile-url",
+        "email-address",
+        "location",
+    ],
+scope: ["r_liteprofile", "r_emailaddress"],
   }, function(accessToken, refreshToken, profile, done) {
-      console.log('asdf')
     // asynchronous verification, for effect...
     process.nextTick(function () {
       // To keep the example simple, the user's LinkedIn profile is returned to
