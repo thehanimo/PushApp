@@ -2,12 +2,18 @@
   "name": "PushApp",
   "version": "0.0.1",
   "private": true,
+  "rnpm": {
+    "assets": [
+	    "./app/assets/fonts"
+    ]
+  },
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest"
   },
   "dependencies": {
     "@babel/runtime": "^7.4.4",
+    "native-base": "^2.12.1",
     "react": "16.8.3",
     "react-native": "0.59.8",
     "react-native-gesture-handler": "^1.2.1",
