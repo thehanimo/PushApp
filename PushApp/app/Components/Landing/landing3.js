@@ -21,19 +21,23 @@ export default class Landing extends Component<Props> {
   render() {
 	return (
 	  <Container>
-		  <Content style={{marginTop:100}}>
-                <Image source={require('../../assets/images/landing3.png')} style={styles.backgroundImage}></Image>
-				<Text style={styles.Heading}>Archive Access</Text>
-				<Text style={styles.MainContent}>Access Relevent content from our Archive anytime, anywhere</Text>
-				<TouchableOpacity style={styles.MainButton} onPress={() => this.props.navigation.navigate('login')}><Icon type="MaterialIcons" name="done" style={styles.MainButtonIcon}/></TouchableOpacity>
-				<View style={styles.NavButtons}>
-					<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing1')}>
-						<View style={styles.NavButton}></View>
-					</TouchableOpacity>
-					<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing2')}>
-						<View style={styles.NavButton}></View>
-					</TouchableOpacity>
-					<TouchableOpacity style={[styles.NavButton, styles.ActiveNavButton]}></TouchableOpacity>
+		  <Content>
+				<View style={styles.MainContainer}>
+					<View style={styles.ContentWrapper}>
+						<Image source={require('../../assets/images/landing3.png')} style={styles.backgroundImage}></Image>
+						<Text style={styles.Heading}>Archive Access</Text>
+						<Text style={styles.MainContent}>Access Relevent content from our Archive anytime, anywhere</Text>
+						<TouchableOpacity style={styles.MainButton} onPress={() => this.props.navigation.navigate('login')}><Icon type="MaterialIcons" name="done" style={styles.MainButtonIcon}/></TouchableOpacity>
+						<View style={styles.NavButtons}>
+							<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing1')}>
+								<View style={styles.NavButton}></View>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing2')}>
+								<View style={styles.NavButton}></View>
+							</TouchableOpacity>
+							<TouchableOpacity style={[styles.NavButton, styles.ActiveNavButton]}></TouchableOpacity>
+						</View>
+					</View>
 				</View>
 		  </Content>
 	  </Container>

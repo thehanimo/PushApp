@@ -6,7 +6,8 @@ import {
   TextInput,
 	Image,
   TouchableOpacity,
-  Linking
+  Linking,
+  Platform
 } from 'react-native';
 import { Container, Content, Header, Left, Right, Icon, Body } from 'native-base';
 import NavigationService from '../../../NavigationService';
@@ -29,7 +30,9 @@ export default class Login extends Component<Props> {
     if(this.state.loading) loader =  <View style={styles.LoadingOverlay}><View style={styles.Loader}></View></View>
     return (
       <Container>
-        <Content style={{marginTop:100}}>
+        <Content>
+          <View style={styles.MainContainer}>
+            <View style={styles.ContentWrapper}>
               <Text style={styles.Heading}>Join Pushstart</Text>
               <Text style={styles.MainContent}>Join the amazing community of Entrepreneurs.</Text>
               <Image source={require('../../assets/images/login1.png')} style={styles.backgroundImage}></Image>
@@ -41,16 +44,21 @@ export default class Login extends Component<Props> {
                   <Text style={styles.BottomText}>By signing up you agree to our <Text style={{fontWeight:'bold'}}>Terms of Use</Text> and <Text style={{fontWeight:'bold'}}>Privacy Policy</Text></Text>
               </View>
               {loader}
+            </View>
+          </View>
         </Content>
       </Container>
     );
   }
   loginPress(){
-    Linking.openURL('http://localhost:3000/auth/app/linkedin');
+    if(Platform.OS == 'ios') Linking.openURL('http://hani.local:3000/auth/app/linkedin');
+    else Linking.openURL('http://10.0.2.2:3000/auth/app/linkedin');
     this.setState({loading:true});
   }
   authenticate(accessToken){
-    return fetch(`http://localhost:3000/auth/linkedin/callback/${accessToken}`, {
+    var domain = '10.0.2.2'
+    if(Platform.OS == 'ios') domain = 'hani.local'
+    return fetch(`http://${domain}:3000/auth/linkedin/callback/${accessToken}`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

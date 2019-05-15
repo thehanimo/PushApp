@@ -1,17 +1,30 @@
 import {
     StyleSheet,
-    Dimensions
+		Dimensions,
+		Platform
   } from 'react-native';
 export default styles = StyleSheet.create({
-	backgroundImage:{
-		flex: 1,
-		alignSelf: 'stretch',
+	MainContainer:{
+		flex:1,
+		flexDirection:'column',
+		justifyContent:'center',
 		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').width,
+		height: Dimensions.get('window').height - 24,
+	},
+	ContentWrapper:{
+		width:'100%',
+		height:670,
+	},
+	backgroundImage:{
+		zIndex:-1,
+		marginTop: Platform.OS == 'ios'? 0: -40,
+		width: '100%',
+		height: Platform.OS == 'ios'? '60%':'65%',
+		alignSelf:'stretch',
 	},
 	Heading:{
 		textAlign: 'left',
-		marginTop: 16,
+		marginTop: 50,
 		marginLeft: 50,
 		fontSize: 26,
 		fontFamily: 'Poppins-Medium',
@@ -19,7 +32,6 @@ export default styles = StyleSheet.create({
 	},
 	MainContent:{
 		textAlign: 'left',
-		marginTop: 16,
 		marginLeft: 50,
 		marginRight: 75,
 		marginBottom: 8,
@@ -31,6 +43,8 @@ export default styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		alignSelf: 'center',
+		position:'absolute',
+		bottom: '10%',
 		marginTop: 38,
 		width: 289,
 		height: 45,
@@ -58,6 +72,8 @@ export default styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		alignSelf: 'center',
+		position:'absolute',
+		bottom: '2%',
 		width: 180,
 		height: 30,
 		marginTop: 25,
@@ -78,6 +94,7 @@ export default styles = StyleSheet.create({
 		opacity:0.925,
 		justifyContent:'center',
 		alignItems:'center',
+		elevation: 3,
 	},
 	Loader:{
 		width:138,

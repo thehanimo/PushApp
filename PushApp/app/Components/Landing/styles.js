@@ -1,13 +1,24 @@
 import {
     StyleSheet,
-    Dimensions
+		Dimensions,
+		Platform,
   } from 'react-native';
 export default styles = StyleSheet.create({
-	backgroundImage:{
-		flex: 1,
-		alignSelf: 'stretch',
+	MainContainer:{
+		flex:1,
+		flexDirection:'column',
+		justifyContent:'center',
 		width: Dimensions.get('window').width,
-		height: Dimensions.get('window').width - 30,
+		height: Dimensions.get('window').height - 24,
+	},
+	ContentWrapper:{
+		width:'100%',
+		height:670,
+	},
+	backgroundImage:{
+		width: '100%',
+		height: Platform.OS == 'ios'? '55%':'60%',
+		alignSelf:'flex-end',
 	},
 	Heading:{
 		textAlign: 'left',
@@ -28,8 +39,8 @@ export default styles = StyleSheet.create({
 	},
 	MainButton: {
 		position: 'absolute',
-		top: 550,
-		left: 241,
+		bottom:'10%',
+		right:'10%',
 		width: 70,
 		height: 70,
 		elevation: 2,
@@ -47,8 +58,8 @@ export default styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		position: 'absolute',
-		top: 580,
-		left: 51,
+		bottom:'15%',
+		left:50,
 		width: 150,
 		height: 10,
 		justifyContent: 'flex-start',

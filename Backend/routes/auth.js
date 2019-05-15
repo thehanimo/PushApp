@@ -18,5 +18,4 @@ function(req, res) {
 router.get('/linkedin/callback', (req,res) =>{
   res.redirect(`pushapp://login/${req._parsedOriginalUrl.search}`)
 });
-
 module.exports = router;
