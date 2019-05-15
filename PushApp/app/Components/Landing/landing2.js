@@ -20,8 +20,8 @@ export default class Landing2 extends Component<Props> {
 	}
   render() {
 	return (
-	  <Container style={{marginTop:100}}>
-		  <Content>
+	  <Container>
+		  <Content style={{marginTop:100}}>
 				<Image source={require('../../assets/images/landing2.png')} style={styles.backgroundImage}></Image>
 				<Text style={styles.Heading}>Get Relevent Content</Text>
 				<Text style={styles.MainContent}>Get notified about relevant content from Pushstart anytime, anywhere</Text>

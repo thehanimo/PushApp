@@ -22,8 +22,8 @@ export default class Landing1 extends Component<Props> {
 	}
   render() {
 	return (
-	  <Container style={{marginTop:100}}>
-		  <Content>
+	  <Container>
+		  <Content style={{marginTop:100}}>
 				<Image source={require('../../assets/images/landing1.png')} style={styles.backgroundImage}></Image>
 				<Text style={styles.Heading}>Hello Pushstarter</Text>
 				<Text style={styles.MainContent}>Welcome to India’s most active community for Entrepreneur’s</Text>

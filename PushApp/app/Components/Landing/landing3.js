@@ -20,8 +20,8 @@ export default class Landing extends Component<Props> {
 	}
   render() {
 	return (
-	  <Container style={{marginTop:100}}>
-		  <Content>
+	  <Container>
+		  <Content style={{marginTop:100}}>
                 <Image source={require('../../assets/images/landing3.png')} style={styles.backgroundImage}></Image>
 				<Text style={styles.Heading}>Archive Access</Text>
 				<Text style={styles.MainContent}>Access Relevent content from our Archive anytime, anywhere</Text>

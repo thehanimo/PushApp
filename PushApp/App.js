@@ -7,6 +7,7 @@ import Landing1 from './app/Components/Landing/landing1'
 import Landing2 from './app/Components/Landing/landing2'
 import Landing3 from './app/Components/Landing/landing3'
 import Login from './app/Components/Login/login'
+import Home from './app/Components/Home/home'
 
 const RootStack = createStackNavigator(
   {
@@ -24,6 +25,7 @@ const RootStack = createStackNavigator(
       }
     ),
     login: Login,
+    home: Home,
   },
   {
     initialRouteName: 'landing',
@@ -67,8 +69,9 @@ export default class App extends Component<Props> {
     navigate = (url) => { // E
       const route = url.replace(/.*?:\/\//g, '');
       const routeName = route.split('/')[0];
-      const msg = route.split('/')[1];
-      console.log(msg)
-      NavigationService.navigate('login',{msg:msg})
+      const msg = route.split('/').splice(1);
+      let accessToken = '';
+      if(routeName == 'login') accessToken = msg[0];
+      NavigationService.navigate(routeName,{accessToken:accessToken})
     }
 }

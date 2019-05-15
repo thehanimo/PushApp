@@ -8,10 +8,15 @@ router.get('/app/linkedin', passport.authenticate('linkedin', { state: 'state'  
     // function will not be called.
 });
 
-router.get('/linkedin/callback', passport.authenticate('linkedin', {
-  successRedirect: 'pushapp://login/success',
-  failureRedirect: 'pushapp://login/failure',
+router.post('/linkedin/callback', passport.authenticate('linkedin', {
   session: false
-}));
+}),
+function(req, res) {
+  res.json( {displayName:req.user.displayName} );
+});
+
+router.get('/linkedin/callback', (req,res) =>{
+  res.redirect(`pushapp://login/${req._parsedOriginalUrl.search}`)
+});
 
 module.exports = router;
