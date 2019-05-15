@@ -27,9 +27,13 @@ export default class Landing2 extends Component<Props> {
 				<Text style={styles.MainContent}>Get notified about relevant content from Pushstart anytime, anywhere</Text>
 				<TouchableOpacity style={styles.MainButton} onPress={() => this.props.navigation.navigate('Landing3')}><Icon type="MaterialIcons" name="chevron-right" style={styles.MainButtonIcon}/></TouchableOpacity>
 				<View style={styles.NavButtons}>
-					<TouchableOpacity style={styles.NavButton} onPress={() => this.props.navigation.navigate('Landing1')}></TouchableOpacity>
+					<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing1')}>
+						<View style={styles.NavButton}></View>
+					</TouchableOpacity>
 					<TouchableOpacity style={[styles.NavButton, styles.ActiveNavButton]}></TouchableOpacity>
-					<TouchableOpacity style={styles.NavButton} onPress={() => this.props.navigation.navigate('Landing3')}></TouchableOpacity>
+					<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing3')}>
+						<View style={styles.NavButton}></View>
+					</TouchableOpacity>
 				</View>
 		  </Content>
 	  </Container>

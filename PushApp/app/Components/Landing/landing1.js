@@ -30,8 +30,12 @@ export default class Landing1 extends Component<Props> {
 				<TouchableOpacity style={styles.MainButton} onPress={() => this.props.navigation.navigate('Landing2')}><Icon type="MaterialIcons" name="chevron-right" style={styles.MainButtonIcon}/></TouchableOpacity>
 				<View style={styles.NavButtons}>
 					<TouchableOpacity style={[styles.NavButton, styles.ActiveNavButton]}></TouchableOpacity>
-					<TouchableOpacity style={styles.NavButton} onPress={() => this.props.navigation.navigate('Landing2')}></TouchableOpacity>
-					<TouchableOpacity style={styles.NavButton} onPress={() => this.props.navigation.navigate('Landing3')}></TouchableOpacity>
+					<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing2')}>
+						<View style={styles.NavButton}></View>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.NavButtonWrapper} onPress={() => this.props.navigation.navigate('Landing3')}>
+						<View style={styles.NavButton}></View>
+					</TouchableOpacity>
 				</View>
 		  </Content>
 	  </Container>

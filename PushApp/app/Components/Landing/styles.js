@@ -54,6 +54,10 @@ export default styles = StyleSheet.create({
 		justifyContent: 'flex-start',
 		alignItems: 'center',
 	},
+	NavButtonWrapper:{
+		height:'100%',
+		justifyContent: 'center',
+	},
 	NavButton:{
 		width: 25,
 		height: 4,

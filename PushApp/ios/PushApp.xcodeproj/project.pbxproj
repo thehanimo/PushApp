@@ -42,6 +42,7 @@
 		2DF0FFEE2056DD460020B375 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DAD3EA31DF850E9000B6D8A /* libReact.a */; };
 		3044544501084E7492A0AE71 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 22713943876A49CE8A1F4444 /* SimpleLineIcons.ttf */; };
 		370B97EA2289AE61001D97C4 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 558EDF08943746E6AC5E0689 /* libRNGestureHandler.a */; };
+		379B1B54228B98530008223D /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
 		3A965DF8B09C4883BC297CB4 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 64AF374667414D6E830A3E90 /* Feather.ttf */; };
 		4B26C3BC163148A2840F44EA /* Nexa-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E9FE1274211E405BA134783B /* Nexa-Bold.otf */; };
 		58F4DC69E80143688528CDE5 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D99F56A93BC94C26845724EC /* Zocial.ttf */; };
@@ -430,6 +431,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */,
+				379B1B54228B98530008223D /* libRCTLinking.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1377,7 +1379,7 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios",
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 				);
 				INFOPLIST_FILE = PushAppTests/Info.plist;
@@ -1407,7 +1409,7 @@
 				DEVELOPMENT_TEAM = 6FCTZ7GPA5;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios/**",
+					"$(SRCROOT)/../node_modules/react-native-gesture-handler/ios",
 					"$(SRCROOT)/../node_modules/react-native-screens/ios",
 				);
 				INFOPLIST_FILE = PushAppTests/Info.plist;
