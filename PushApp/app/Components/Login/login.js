@@ -86,16 +86,12 @@ export default class Login extends Component<Props> {
     );
   }
   loginPress() {
-    if (Platform.OS == "ios")
-      Linking.openURL("http://hani.local:3000/auth/app/linkedin");
-    else Linking.openURL("http://10.0.2.2:3000/auth/app/linkedin");
+    Linking.openURL("http://192.168.0.103:3000/auth/app/linkedin");
     this.setState({ loading: true });
   }
   authenticate(accessToken) {
-    var domain = "10.0.2.2";
-    if (Platform.OS == "ios") domain = "hani.local";
     return fetch(
-      `http://${domain}:3000/auth/linkedin/callback/${accessToken}`,
+      `http://192.168.0.103:3000/auth/linkedin/callback/${accessToken}`,
       {
         method: "POST",
         headers: {

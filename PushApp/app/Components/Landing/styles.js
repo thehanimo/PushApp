@@ -30,7 +30,7 @@ export default (styles = StyleSheet.create({
   Heading: {
     textAlign: "left",
     marginTop: 16,
-    marginLeft: "10%",
+    marginLeft: wp("10%"),
     fontSize: 26,
     fontFamily: "Poppins-Medium",
     color: "#2a3455"
@@ -38,16 +38,16 @@ export default (styles = StyleSheet.create({
   MainContent: {
     textAlign: "left",
     marginTop: 16,
-    marginLeft: "10%",
-    marginRight: "10%",
+    marginLeft: wp("10%"),
+    marginRight: wp("10%"),
     color: "#807d83",
     fontSize: 16,
     fontFamily: "Poppins-Light"
   },
   MainButton: {
     position: "absolute",
-    bottom: "8%",
-    right: "13%",
+    bottom: hp("8%"),
+    right: wp("13%"),
     width: 70,
     height: 70,
     elevation: 2,
@@ -65,12 +65,12 @@ export default (styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     width: 150,
-    height: 20,
+    height: 30,
     justifyContent: "flex-start",
     alignItems: "center",
     position: "absolute",
-    bottom: "11%",
-    left: "10%"
+    bottom: hp("11%"),
+    left: wp("10%")
   },
   NavButtonWrapper: {
     height: "100%",

@@ -7,27 +7,13 @@ import {
 import { Platform, Linking } from "react-native";
 
 import NavigationService from "./NavigationService";
-import Landing1 from "./app/Components/Landing/landing1";
-import Landing2 from "./app/Components/Landing/landing2";
-import Landing3 from "./app/Components/Landing/landing3";
+import Landing from "./app/Components/Landing/landing";
 import Login from "./app/Components/Login/login";
 import Home from "./app/Components/Home/home";
 
 const RootStack = createStackNavigator(
   {
-    landing: createBottomTabNavigator(
-      {
-        Landing1: Landing1,
-        Landing2: Landing2,
-        Landing3: Landing3
-      },
-      {
-        defaultNavigationOptions: {
-          tabBarVisible: false,
-          animationEnabled: true
-        }
-      }
-    ),
+    landing: Landing,
     login: Login,
     home: Home
   },

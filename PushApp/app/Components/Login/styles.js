@@ -25,15 +25,15 @@ export default (styles = StyleSheet.create({
   Heading: {
     textAlign: "left",
     marginTop: 30,
-    marginLeft: "10%",
+    marginLeft: wp("10%"),
     fontSize: 26,
     fontFamily: "Poppins-Medium",
     color: "#2a3455"
   },
   MainContent: {
     textAlign: "left",
-    marginLeft: "10%",
-    marginRight: "15%",
+    marginLeft: wp("10%"),
+    marginRight: wp("15%"),
     marginTop: 7,
     color: "#807d83",
     fontSize: 16,
@@ -44,7 +44,7 @@ export default (styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
     position: "absolute",
-    bottom: "12%",
+    bottom: hp("12%"),
     marginTop: 38,
     width: 289,
     height: 45,
@@ -73,7 +73,7 @@ export default (styles = StyleSheet.create({
     flexDirection: "row",
     alignSelf: "center",
     position: "absolute",
-    bottom: "5%",
+    bottom: hp("5%"),
     width: 180,
     height: 30,
     marginTop: 25
