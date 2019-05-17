@@ -32,9 +32,9 @@ export default class Landing extends Component<Props> {
     super(props);
     this.state = {
       x: [
-        new Animated.Value(wp("100%")),
-        new Animated.Value(wp("100%")),
-        new Animated.Value(wp("100%"))
+        new Animated.Value(wp("70%")),
+        new Animated.Value(wp("70%")),
+        new Animated.Value(wp("70%"))
       ],
       op: [new Animated.Value(0), new Animated.Value(0), new Animated.Value(0)],
       ActiveNavButtonWidth: [
@@ -82,7 +82,7 @@ export default class Landing extends Component<Props> {
   hide = (x, op, navB, i, dur = 500) => {
     Animated.parallel([
       Animated.timing(x, {
-        toValue: wp(`${-100 * i}%`),
+        toValue: wp(`${-70 * i}%`),
         duration: dur
       }),
       Animated.timing(op, {
@@ -131,15 +131,15 @@ export default class Landing extends Component<Props> {
 
   NavMove = i => {
     if (this.state.currentPage == 0 && i > 1) {
-      this.Move(1, 250);
+      this.Move(1, 300);
       setTimeout(() => {
-        this.Move(1, 250);
-      }, 250);
+        this.Move(1, 300);
+      }, 300);
     } else if (this.state.currentPage == 2 && i < -1) {
-      this.Move(-1, 250);
+      this.Move(-1, 300);
       setTimeout(() => {
-        this.Move(-1, 250);
-      }, 250);
+        this.Move(-1, 300);
+      }, 300);
     } else {
       this.Move(i);
     }
