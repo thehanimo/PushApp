@@ -50,7 +50,10 @@ export default (styles = StyleSheet.create({
     height: 45,
     elevation: 2,
     borderRadius: 8,
-    // boxShadow: '0 0 12 0 rgba(134, 94, 208, 0.2)';
+    shadowColor: "rgba(66, 95, 156, 1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     backgroundColor: "#3d83d9",
     justifyContent: "center",
     alignItems: "center"

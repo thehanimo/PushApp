@@ -28,18 +28,27 @@ export default class Login extends Component<Props> {
     super(props);
     this.state = {
       loading: false,
-      authenticated: false
+      authorisedToken: "",
+      timestamp: ""
     };
+    this.timer;
   }
   render() {
     var loader = null;
     if (
-      this.props.navigation.getParam("accessToken", "") != "" &&
-      this.state.authenticated == false
+      (this.props.navigation.getParam("accessToken", "") !=
+        this.state.authorisedToken ||
+        this.state.timestamp !=
+          this.props.navigation.getParam("timestamp", "")) &&
+      this.state.loading //Remove to accept login callback after timeout and loading disappearance.
     ) {
+      loader = (
+        <View style={styles.LoadingOverlay}>
+          <View style={styles.Loader} />
+        </View>
+      );
       this.authenticate(this.props.navigation.getParam("accessToken", ""));
-    }
-    if (this.state.loading)
+    } else if (this.state.loading)
       loader = (
         <View style={styles.LoadingOverlay}>
           <View style={styles.Loader} />
@@ -86,10 +95,18 @@ export default class Login extends Component<Props> {
     );
   }
   loginPress() {
+    this.setState({
+      loading: true
+    });
+    this.timer = setTimeout(() => {
+      this.setState({
+        loading: false
+      });
+    }, 30000);
     Linking.openURL("http://192.168.0.103:3000/auth/app/linkedin");
-    this.setState({ loading: true });
   }
   authenticate(accessToken) {
+    clearTimeout(this.timer);
     return fetch(
       `http://192.168.0.103:3000/auth/linkedin/callback/${accessToken}`,
       {
@@ -102,14 +119,19 @@ export default class Login extends Component<Props> {
     )
       .then(response => response.json())
       .then(responseJson => {
-        this.setState({ loading: false, authenticated: true });
-        NavigationService.navigate("home", {
-          displayName: responseJson.displayName
-        });
-        return responseJson;
+        if (responseJson.displayName) {
+          this.props.navigation.navigate("home", {
+            displayName: responseJson.displayName
+          });
+        }
       })
       .catch(error => {
-        console.error(error);
+        this.setState({
+          loading: false,
+          authorisedToken: this.props.navigation.getParam("accessToken", ""),
+          timestamp: this.props.navigation.getParam("timestamp", "")
+        });
+        alert("Login Failed");
       });
   }
 }

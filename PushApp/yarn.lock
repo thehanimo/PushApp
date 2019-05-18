@@ -5055,6 +5055,11 @@ react-native-keyboard-aware-scroll-view@0.8.0:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
+react-native-reanimated@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-1.0.1.tgz#5ecb6a2f6dad0351077ac9b771ca943b7ad6feda"
+  integrity sha512-RENoo6/sJc3FApP7vJ1Js7WyDuTVh97bbr5aMjJyw3kqpR2/JDHyL/dQFfOvSSAc+VjitpR9/CfPPad7tLRiIA==
+
 react-native-responsive-screen@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-native-responsive-screen/-/react-native-responsive-screen-1.2.2.tgz#59d82146b61c62510032fb795652335433f05f93"
@@ -5143,6 +5148,11 @@ react-native@0.59.8:
     ws "^1.1.5"
     xmldoc "^0.4.0"
     yargs "^9.0.0"
+
+react-navigation-animated-switch@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-animated-switch/-/react-navigation-animated-switch-0.2.0.tgz#9c2b39431095012972a52921b1987de44fee1bac"
+  integrity sha512-Y+uMjKz5uC2IVQUaNacmEKPOlSc/B2x6o5M7IcVJ5wwxScem8cW2hQKnZwpEI0Z/CcwFkvjkwYv0gV4+AnovOw==
 
 react-navigation-drawer@1.2.1:
   version "1.2.1"

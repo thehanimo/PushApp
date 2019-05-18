@@ -52,7 +52,10 @@ export default (styles = StyleSheet.create({
     height: 70,
     elevation: 2,
     borderRadius: 35,
-    // boxShadow: '0 0 12 0 rgba(134, 94, 208, 0.2)';
+    shadowColor: "rgba(134, 94, 208, 1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
     backgroundColor: "#865ed0",
     justifyContent: "center"
   },

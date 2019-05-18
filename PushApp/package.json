@@ -18,9 +18,11 @@
     "react-native": "0.59.8",
     "react-native-extra-dimensions-android": "^1.2.5",
     "react-native-gesture-handler": "^1.2.1",
+    "react-native-reanimated": "^1.0.1",
     "react-native-responsive-screen": "^1.2.2",
     "react-native-screens": "^1.0.0-alpha.22",
-    "react-navigation": "^3.9.1"
+    "react-navigation": "^3.9.1",
+    "react-navigation-animated-switch": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
