@@ -40,7 +40,8 @@ export default class Login extends Component<Props> {
         this.state.authorisedToken ||
         this.state.timestamp !=
           this.props.navigation.getParam("timestamp", "")) &&
-      this.state.loading //Remove to accept login callback after timeout and loading disappearance.
+      this.state.loading &&
+      this.props.navigation.getParam("accessToken", "") != "" //Remove to accept login callback after timeout and loading disappearance.
     ) {
       loader = (
         <View style={styles.LoadingOverlay}>
@@ -120,7 +121,12 @@ export default class Login extends Component<Props> {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson.displayName) {
-          this.props.navigation.navigate("home", {
+          this.setState({
+            loading: false,
+            authorisedToken: this.props.navigation.getParam("accessToken", ""),
+            timestamp: this.props.navigation.getParam("timestamp", "")
+          });
+          this.props.navigation.navigate("confirm", {
             displayName: responseJson.displayName
           });
         }

@@ -11,12 +11,23 @@ import { Platform, Linking } from "react-native";
 import NavigationService from "./NavigationService";
 import Landing from "./app/Components/Landing/landing";
 import Login from "./app/Components/Login/login";
+import Confirm from "./app/Components/Login/confirm";
 import Home from "./app/Components/Home/home";
 
 const RootStack = createAnimatedSwitchNavigator(
   {
     landing: Landing,
-    login: Login,
+    login: createStackNavigator(
+      {
+        login: Login,
+        confirm: Confirm
+      },
+      {
+        defaultNavigationOptions: {
+          header: null
+        }
+      }
+    ),
     home: Home
   },
   {
