@@ -61,26 +61,31 @@ export default class Confirm extends Component<Props> {
     return (
       <Container>
         <Content>
-          <View style={styles.LoadingOverlay}>
-            <Thumbnail
-              source={{ uri: profile.photo }}
-              style={styles.Thumbnail}
-            />
-            <Text style={styles.Name} allowFontScaling={false}>
-              {profile.firstName} {profile.lastName}
-            </Text>
-            <Text style={styles.Email} allowFontScaling={false}>
-              {profile.email}
-            </Text>
-            <TouchableOpacity
-              style={styles.ConfirmButton}
-              onPress={() => this.Confirm(profile)}
-            >
-              <Text style={styles.ConfirmButtonLabel} allowFontScaling={false}>
-                Continue
+          <SafeAreaView style={styles.SAV}>
+            <View style={styles.LoadingOverlay}>
+              <Thumbnail
+                source={{ uri: profile.photo }}
+                style={styles.Thumbnail}
+              />
+              <Text style={styles.Name} allowFontScaling={false}>
+                {profile.firstName} {profile.lastName}
               </Text>
-            </TouchableOpacity>
-          </View>
+              <Text style={styles.Email} allowFontScaling={false}>
+                {profile.email}
+              </Text>
+              <TouchableOpacity
+                style={styles.ConfirmButton}
+                onPress={() => this.Confirm(profile)}
+              >
+                <Text
+                  style={styles.ConfirmButtonLabel}
+                  allowFontScaling={false}
+                >
+                  Continue
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </SafeAreaView>
         </Content>
       </Container>
     );

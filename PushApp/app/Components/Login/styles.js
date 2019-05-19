@@ -91,7 +91,7 @@ export default (styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    height: hp("100%"),
+    height: "100%",
     width: wp("100%"),
     backgroundColor: "#ffffff",
     opacity: 0.925,
