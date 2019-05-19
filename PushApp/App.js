@@ -6,7 +6,15 @@ import {
 } from "react-navigation";
 import createAnimatedSwitchNavigator from "react-navigation-animated-switch";
 import { Transition } from "react-native-reanimated";
-import { Platform, Linking } from "react-native";
+import {
+  Platform,
+  Linking,
+  View,
+  ActivityIndicator,
+  StatusBar,
+  Text
+} from "react-native";
+import AsyncStorage from "@react-native-community/async-storage";
 
 import NavigationService from "./NavigationService";
 import Landing from "./app/Components/Landing/landing";
@@ -14,8 +22,36 @@ import Login from "./app/Components/Login/login";
 import Confirm from "./app/Components/Login/confirm";
 import Home from "./app/Components/Home/home";
 
+class Loading extends Component {
+  constructor(props) {
+    super(props);
+    this.getUserId();
+  }
+  getUserId = async () => {
+    let profile = null;
+    try {
+      profile = (await AsyncStorage.getItem("profile")) || null;
+      profile = JSON.parse(profile);
+      if (profile) NavigationService.navigate("confirm", { profile });
+      else NavigationService.navigate("landing");
+    } catch (error) {
+      // Error retrieving data
+      alert(error.message);
+    }
+  };
+  render() {
+    return (
+      <View>
+        <ActivityIndicator />
+        <StatusBar barStyle="default" />
+        <Text>asdfasdf</Text>
+      </View>
+    );
+  }
+}
 const RootStack = createAnimatedSwitchNavigator(
   {
+    loading: Loading,
     landing: Landing,
     login: createStackNavigator(
       {
@@ -51,6 +87,7 @@ export default class App extends Component<Props> {
   constructor(props) {
     super(props);
   }
+
   render() {
     return (
       <Application

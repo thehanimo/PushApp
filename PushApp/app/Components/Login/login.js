@@ -108,26 +108,23 @@ export default class Login extends Component<Props> {
   }
   authenticate(accessToken) {
     clearTimeout(this.timer);
-    return fetch(
-      `http://192.168.0.103:3000/auth/linkedin/callback/${accessToken}`,
-      {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+    fetch(`http://192.168.0.103:3000/auth/linkedin/callback/${accessToken}`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
       }
-    )
+    })
       .then(response => response.json())
       .then(responseJson => {
-        if (responseJson.displayName) {
+        if (responseJson) {
           this.setState({
             loading: false,
             authorisedToken: this.props.navigation.getParam("accessToken", ""),
             timestamp: this.props.navigation.getParam("timestamp", "")
           });
           this.props.navigation.navigate("confirm", {
-            displayName: responseJson.displayName
+            profile: responseJson
           });
         }
       })

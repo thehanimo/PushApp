@@ -91,8 +91,8 @@ export default (styles = StyleSheet.create({
     position: "absolute",
     top: 0,
     left: 0,
-    height: "100%",
-    width: "100%",
+    height: hp("100%"),
+    width: wp("100%"),
     backgroundColor: "#ffffff",
     opacity: 0.925,
     justifyContent: "center",
@@ -106,5 +106,43 @@ export default (styles = StyleSheet.create({
     borderColor: "#3d83d9",
     borderWidth: 3,
     borderRadius: 69
+  },
+  Thumbnail: {
+    height: wp("40%"),
+    width: wp("40%"),
+    borderRadius: wp("20%"),
+    borderColor: "#c4b1e8",
+    borderWidth: 2
+  },
+  Name: {
+    marginTop: 10,
+    fontFamily: "Poppins-Medium",
+    fontSize: 20,
+    color: "#2a3455"
+  },
+  Email: {
+    marginTop: 5,
+    fontFamily: "Poppins-Light",
+    fontSize: 16,
+    color: "#807d83"
+  },
+  ConfirmButton: {
+    marginTop: 25,
+    width: 138,
+    height: 45,
+    elevation: 2,
+    borderRadius: 8,
+    shadowColor: "rgba(134, 94, 208, 1)",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 2,
+    backgroundColor: "#865ed0",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  ConfirmButtonLabel: {
+    fontFamily: "Poppins-Light",
+    fontSize: 16,
+    color: "#fff"
   }
 }));
