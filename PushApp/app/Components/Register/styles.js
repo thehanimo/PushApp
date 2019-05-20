@@ -93,5 +93,12 @@ export default (styles = StyleSheet.create({
   ContinueButtonLabel: {
     color: "#fff",
     fontFamily: "Poppins-Regular"
+  },
+  validateIcon: {
+    position: "absolute",
+    marginTop: 60,
+    fontSize: 16,
+    color: "#865ed0",
+    right: wp("8%")
   }
 }));
