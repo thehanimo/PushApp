@@ -97,7 +97,9 @@ export default class Login extends Component<Props> {
   }
   loginPress() {
     this.setState({
-      loading: true
+      loading: true,
+      authorisedToken: this.props.navigation.getParam("accessToken", ""),
+      timestamp: this.props.navigation.getParam("timestamp", "")
     });
     this.timer = setTimeout(() => {
       this.setState({

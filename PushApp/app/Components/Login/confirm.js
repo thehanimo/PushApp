@@ -58,6 +58,7 @@ export default class Confirm extends Component<Props> {
   };
   render() {
     var profile = this.props.navigation.getParam("profile", "");
+    alert(profile.photo);
     return (
       <Container>
         <Content>

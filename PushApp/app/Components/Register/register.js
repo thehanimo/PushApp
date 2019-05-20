@@ -21,6 +21,7 @@ import {
   Body,
   Thumbnail
 } from "native-base";
+import ImagePicker from "react-native-image-crop-picker";
 import NavigationService from "../../../NavigationService";
 import styles from "./styles";
 
@@ -29,6 +30,7 @@ export default class Register extends Component<Props> {
   constructor(props) {
     super(props);
     this.state = {
+      image: { uri: this.props.navigation.getParam("profile", "").photo },
       fields: {
         fullName: {
           label: { color: "#807d83" },
@@ -188,7 +190,7 @@ export default class Register extends Component<Props> {
   };
   render() {
     var profile = this.props.navigation.getParam("profile", "");
-    console.log(profile);
+    console.log(this.state.image);
     return (
       <Container>
         <Content>
@@ -203,10 +205,27 @@ export default class Register extends Component<Props> {
                 }}
               >
                 <Thumbnail
-                  source={{ uri: profile.photo }}
+                  source={{ uri: this.state.image.uri }}
                   style={styles.Thumbnail}
                 />
-                <TouchableOpacity style={styles.PictureButton}>
+                <TouchableOpacity
+                  style={styles.PictureButton}
+                  onPress={() => {
+                    ImagePicker.openPicker({
+                      width: 800,
+                      height: 800,
+                      cropping: true,
+                      includeBase64: true
+                    }).then(image => {
+                      const source = {
+                        uri: "data:image/jpeg;base64," + image.data
+                      };
+                      this.setState({
+                        image: source
+                      });
+                    });
+                  }}
+                >
                   <Icon
                     type="SimpleLineIcons"
                     name="pencil"
@@ -251,9 +270,8 @@ export default class Register extends Component<Props> {
                   }
                   blurOnSubmit={false}
                   returnKeyType="next"
-                >
-                  {profile.firstName} {profile.lastName}
-                </TextInput>
+                  value={profile.firstName + " " + profile.lastName}
+                />
                 <Icon
                   type="MaterialIcons"
                   name="done"
@@ -303,9 +321,8 @@ export default class Register extends Component<Props> {
                   }
                   blurOnSubmit={false}
                   returnKeyType="next"
-                >
-                  {profile.email}
-                </TextInput>
+                  value={profile.email}
+                />
                 <Icon
                   type="MaterialIcons"
                   name="done"

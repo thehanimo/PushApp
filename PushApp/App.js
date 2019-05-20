@@ -31,7 +31,7 @@ class Loading extends Component {
   getUserId = async () => {
     let profile = null;
     try {
-      profile = (await AsyncStorage.getItem("profile")) || null;
+      profile = (await AsyncStorage.getItem("profile1")) || null;
       profile = JSON.parse(profile);
       if (profile) NavigationService.navigate("register", { profile });
       else NavigationService.navigate("landing");
@@ -42,10 +42,15 @@ class Loading extends Component {
   };
   render() {
     return (
-      <View>
+      <View
+        style={{
+          alignItems: "center",
+          justifyContent: "center",
+          height: "100%"
+        }}
+      >
         <ActivityIndicator />
         <StatusBar barStyle="default" />
-        <Text>asdfasdf</Text>
       </View>
     );
   }
