@@ -24,58 +24,54 @@ import NavigationService from "../../../NavigationService";
 import styles from "./styles";
 
 type Props = {};
-export default class Confirm extends Component<Props> {
+export default class Interests extends Component<Props> {
   constructor(props) {
     super(props);
+    this.getProfile();
+    this.state = {
+      profile: {
+        image: { uri: null },
+        id: null,
+        fullName: null,
+        email: null,
+        phone: null,
+        city: null,
+        referral: null
+      }
+    };
   }
-
-  saveProfile = async profile => {
+  getProfile = async () => {
+    let profile = null;
     try {
-      await AsyncStorage.setItem("profile", JSON.stringify(profile));
-      NavigationService.navigate("register");
+      profile = (await AsyncStorage.getItem("profile")) || null;
+      profile = JSON.parse(profile);
+      this.setState({
+        profile: { ...profile, image: { uri: profile.image } }
+      });
     } catch (error) {
       // Error retrieving data
       alert(error.message);
     }
   };
-
-  Confirm = profile => {
-    fetch(`http://192.168.0.103:3000/auth/confirm`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ profile })
-    })
-      .then(response => {
-        console.log(response);
-        this.saveProfile(profile);
-      })
-      .catch(error => {
-        alert(error);
-      });
-  };
   render() {
-    var profile = this.props.navigation.getParam("profile", "");
     return (
       <Container>
         <Content>
           <SafeAreaView style={styles.SAV}>
             <View style={styles.LoadingOverlay}>
               <Thumbnail
-                source={{ uri: profile.image.uri }}
+                source={{ uri: this.state.profile.image.uri }}
                 style={styles.Thumbnail}
               />
               <Text style={styles.Name} allowFontScaling={false}>
-                {profile.fullName}
+                {this.state.profile.fullName}
               </Text>
               <Text style={styles.Email} allowFontScaling={false}>
-                {profile.email}
+                {this.state.profile.email}
               </Text>
               <TouchableOpacity
                 style={styles.ConfirmButton}
-                onPress={() => this.Confirm(profile)}
+                // onPress={() => this.Confirm(profile)}
               >
                 <Text
                   style={styles.ConfirmButtonLabel}

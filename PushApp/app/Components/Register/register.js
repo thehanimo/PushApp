@@ -29,37 +29,50 @@ type Props = {};
 export default class Register extends Component<Props> {
   constructor(props) {
     super(props);
+    this.getProfile();
     this.state = {
-      image: { uri: this.props.navigation.getParam("profile", "").photo },
+      provider: "",
+      id: "",
+      image: { uri: null },
       fields: {
         fullName: {
           label: { color: "#807d83" },
           view: { borderColor: "#E8E7E9" },
-          icon: { opacity: 1 },
-          valid: true
+          icon: { opacity: 0 },
+          valid: false,
+          value: "",
+          required: true
         },
         email: {
           label: { color: "#807d83" },
           view: { borderColor: "#E8E7E9" },
-          icon: { opacity: 1 },
-          valid: true
+          icon: { opacity: 0 },
+          valid: false,
+          value: "",
+          required: true
         },
         phone: {
           label: { color: "#807d83" },
           view: { borderColor: "#E8E7E9" },
           icon: { opacity: 0 },
-          valid: false
+          valid: false,
+          value: "",
+          required: true
         },
         city: {
           label: { color: "#807d83" },
           view: { borderColor: "#E8E7E9" },
           icon: { opacity: 0 },
-          valid: false
+          valid: false,
+          value: "",
+          required: true
         },
         referral: {
           label: { color: "#807d83" },
           view: { borderColor: "#E8E7E9" },
-          icon: { opacity: 0 }
+          icon: { opacity: 0 },
+          value: "",
+          required: false
         }
       },
       buttonDisabled: true,
@@ -68,114 +81,158 @@ export default class Register extends Component<Props> {
       }
     };
   }
-
-  saveProfile = async profile => {
+  getProfile = async () => {
+    let profile = null;
     try {
-      await AsyncStorage.setItem("profile", JSON.stringify(profile));
-      alert("done!");
+      profile = (await AsyncStorage.getItem("profile")) || null;
+      profile = JSON.parse(profile);
+      this.setState(
+        {
+          provider: profile.provider,
+          id: profile.id,
+          image: { uri: profile.image },
+          fields: {
+            ...this.state.fields,
+            fullName: {
+              ...this.state.fields.fullName,
+              value: profile.fullName,
+              valid: profile.fullName ? true : false,
+              icon: { opacity: profile.fullName ? 1 : 0 }
+            },
+            email: {
+              ...this.state.fields.email,
+              value: profile.email,
+              valid: profile.email ? true : false,
+              icon: { opacity: profile.email ? 1 : 0 }
+            },
+            phone: {
+              ...this.state.fields.phone,
+              value: profile.phone || "",
+              valid: profile.phone ? true : false,
+              icon: { opacity: profile.phone ? 1 : 0 }
+            },
+            city: {
+              ...this.state.fields.city,
+              value: profile.city || "",
+              valid: profile.city ? true : false,
+              icon: { opacity: profile.city ? 1 : 0 }
+            },
+            referral: {
+              ...this.state.fields.referral,
+              value: profile.referral || "",
+              valid: profile.referral ? true : false,
+              icon: { opacity: profile.referral ? 1 : 0 }
+            }
+          }
+        },
+        () => this.formValidator()
+      );
     } catch (error) {
       // Error retrieving data
       alert(error.message);
     }
   };
-
-  Confirm = profile => {
-    fetch(`http://192.168.0.103:3000/auth/register`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ profile })
-    })
-      .then(response => {
-        console.log(response);
-        this.saveProfile(profile);
-      })
-      .catch(error => {
-        alert(error);
-      });
-  };
-
-  validator = (text, regexp, field, required) => {
-    if (regexp.test(text.trimLeft())) {
-      this.setState({
-        fields: {
-          ...this.state.fields,
-          [field]: {
-            label: { color: "green" },
-            view: { borderColor: "green" },
-            icon: { opacity: 1 },
-            valid: required ? true : undefined
+  validator = (text, regexp, field) => {
+    text = text.trimLeft();
+    if (regexp.test(text)) {
+      this.setState(
+        {
+          fields: {
+            ...this.state.fields,
+            [field]: {
+              ...this.state.fields[field],
+              label: { color: "green" },
+              view: { borderColor: "green" },
+              icon: { opacity: 1 },
+              valid: true,
+              value: text
+            }
           }
-        }
-      });
+        },
+        () => this.formValidator()
+      );
+    } else if (!this.state.fields[field].required && text == "") {
+      this.setState(
+        {
+          fields: {
+            ...this.state.fields,
+            [field]: {
+              ...this.state.fields[field],
+              label: { color: "#807d83" },
+              view: { borderColor: "#E8E7E9" },
+              icon: { opacity: 0 },
+              valid: true,
+              value: text
+            }
+          }
+        },
+        () => this.formValidator()
+      );
     } else {
-      this.setState({
-        fields: {
-          ...this.state.fields,
-          [field]: {
-            label: { color: "red" },
-            view: { borderColor: "red" },
-            icon: { opacity: 0 },
-            valid: required ? false : undefined
+      this.setState(
+        {
+          fields: {
+            ...this.state.fields,
+            [field]: {
+              ...this.state.fields[field],
+              label: { color: "red" },
+              view: { borderColor: "red" },
+              icon: { opacity: 0 },
+              valid: false,
+              value: text
+            }
           }
-        }
-      });
+        },
+        () => this.formValidator()
+      );
     }
-    this.formValidator();
   };
-  endValidator = (text, regexp, field, required) => {
-    if (regexp.test(text.trimLeft())) {
+  endValidator = (text, regexp, field, isSubmitted = false) => {
+    text = text.trimLeft();
+    if (
+      regexp.test(text) ||
+      (!this.state.fields[field].required && text == "")
+    ) {
       this.setState({
         fields: {
           ...this.state.fields,
           [field]: {
+            ...this.state.fields[field],
             label: { color: "#807d83" },
             view: { borderColor: "#E8E7E9" },
-            valid: required ? true : undefined
+            valid: true,
+            value: text
           }
         }
       });
-      for (var field in this.state.fields) {
-        if (!this.state.fields[field].valid) {
-          this[field].focus();
-          return;
+      if (isSubmitted) {
+        for (var field in this.state.fields) {
+          if (!this.state.fields[field].valid) {
+            this[field].focus();
+            return;
+          }
         }
       }
-    } else if (required) {
-      this.setState({
-        fields: {
-          ...this.state.fields,
-          [field]: {
-            label: { color: "red" },
-            view: { borderColor: "red" },
-            icon: { opacity: 0 },
-            valid: required ? false : undefined
-          }
-        }
-      });
     } else {
       this.setState({
         fields: {
           ...this.state.fields,
           [field]: {
-            label: { color: "#807d83" },
-            view: { borderColor: "#E8E7E9" },
-            icon: { opacity: 0 }
+            ...this.state.fields[field],
+            label: { color: "red" },
+            view: { borderColor: "red" },
+            icon: { opacity: 0 },
+            valid: false,
+            value: text
           }
         }
       });
     }
-    this.formValidator();
   };
 
   formValidator = () => {
     for (var field in this.state.fields) {
-      if (
-        this.state.fields[field].hasOwnProperty("valid") &&
-        !this.state.fields[field].valid
-      ) {
+      if (!this.state.fields[field].valid) {
         this.setState({
           button: { backgroundColor: "gray" },
           buttonDisabled: true
@@ -188,9 +245,46 @@ export default class Register extends Component<Props> {
       buttonDisabled: false
     });
   };
+
+  saveProfile = async (profile, callback) => {
+    try {
+      await AsyncStorage.setItem("profile", JSON.stringify(profile));
+      callback();
+    } catch (error) {
+      // Error retrieving data
+      alert(error.message);
+    }
+  };
+
+  Register = async () => {
+    var updatedProfile = {
+      provider: this.state.provider,
+      id: this.state.id,
+      image: this.state.image.uri,
+      fullName: this.state.fields.fullName.value,
+      email: this.state.fields.email.value,
+      phone: this.state.fields.phone.value,
+      city: this.state.fields.city.value,
+      referral: this.state.fields.referral.value
+    };
+    fetch(`http://192.168.0.103:3000/auth/register`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(updatedProfile)
+    })
+      .then(response => {
+        this.saveProfile(updatedProfile, () => {
+          NavigationService.navigate("interests");
+        });
+      })
+      .catch(error => {
+        alert(error);
+      });
+  };
   render() {
-    var profile = this.props.navigation.getParam("profile", "");
-    console.log(this.state.image);
     return (
       <Container>
         <Content>
@@ -257,6 +351,7 @@ export default class Register extends Component<Props> {
                       e.nativeEvent.text,
                       /^[a-zA-Z ]{3,}$/i,
                       "fullName",
+                      true,
                       true
                     )
                   }
@@ -265,12 +360,13 @@ export default class Register extends Component<Props> {
                       e.nativeEvent.text,
                       /^[a-zA-Z ]{3,}$/i,
                       "fullName",
-                      true
+                      true,
+                      false
                     )
                   }
                   blurOnSubmit={false}
-                  returnKeyType="next"
-                  value={profile.firstName + " " + profile.lastName}
+                  returnKeyLabel="next"
+                  value={this.state.fields.fullName.value}
                 />
                 <Icon
                   type="MaterialIcons"
@@ -316,12 +412,12 @@ export default class Register extends Component<Props> {
                       e.nativeEvent.text,
                       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i,
                       "email",
-                      true
+                      false
                     )
                   }
                   blurOnSubmit={false}
-                  returnKeyType="next"
-                  value={profile.email}
+                  returnKeyLabel="next"
+                  value={this.state.fields.email.value}
                 />
                 <Icon
                   type="MaterialIcons"
@@ -345,7 +441,7 @@ export default class Register extends Component<Props> {
                   }}
                   style={styles.Input}
                   allowFontScaling={false}
-                  keyboardType="phone-pad"
+                  keyboardType="number-pad"
                   onChangeText={text =>
                     this.validator(text, /^[6-9]{1}[0-9]{9}$/i, "phone", true)
                   }
@@ -362,11 +458,12 @@ export default class Register extends Component<Props> {
                       e.nativeEvent.text,
                       /^[6-9]{1}[0-9]{9}$/i,
                       "phone",
-                      true
+                      false
                     )
                   }
                   blurOnSubmit={false}
-                  returnKeyType="next"
+                  returnKeyLabel="next"
+                  value={this.state.fields.phone.value}
                 />
                 <Icon
                   type="MaterialIcons"
@@ -406,11 +503,12 @@ export default class Register extends Component<Props> {
                       e.nativeEvent.text,
                       /^[a-zA-Z ]+$/i,
                       "city",
-                      true
+                      false
                     )
                   }
                   blurOnSubmit={false}
-                  returnKeyType="next"
+                  returnKeyLabel="next"
+                  value={this.state.fields.city.value}
                 />
                 <Icon
                   type="MaterialIcons"
@@ -442,7 +540,7 @@ export default class Register extends Component<Props> {
                       e.nativeEvent.text,
                       /^[a-zA-Z0-9]{8}$/i,
                       "referral",
-                      false
+                      true
                     )
                   }
                   onEndEditing={e =>
@@ -455,6 +553,7 @@ export default class Register extends Component<Props> {
                   }
                   returnKeyType="done"
                   autoCorrect={false}
+                  value={this.state.fields.referral.value}
                 />
                 <Icon
                   type="MaterialIcons"
@@ -472,7 +571,7 @@ export default class Register extends Component<Props> {
         <TouchableOpacity
           disabled={this.state.buttonDisabled}
           style={[styles.ContinueButton, this.state.button]}
-          //   onPress={() => this.Confirm(profile)}
+          onPress={() => this.Register()}
         >
           <Text style={styles.ContinueButtonLabel} allowFontScaling={false}>
             Continue

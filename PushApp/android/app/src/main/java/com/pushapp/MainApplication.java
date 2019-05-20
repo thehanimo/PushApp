@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
-import com.imagepicker.ImagePickerPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.swmansion.reanimated.ReanimatedPackage;
 import ca.jaysoo.extradimensions.ExtraDimensionsPackage;
@@ -31,7 +30,6 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new PickerPackage(),
-            new ImagePickerPackage(),
             new AsyncStoragePackage(),
             new ReanimatedPackage(),
             new ExtraDimensionsPackage(),

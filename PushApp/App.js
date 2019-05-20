@@ -22,6 +22,7 @@ import Login from "./app/Components/Login/login";
 import Confirm from "./app/Components/Login/confirm";
 import Home from "./app/Components/Home/home";
 import Register from "./app/Components/Register/register";
+import Interests from "./app/Components/Register/interests";
 
 class Loading extends Component {
   constructor(props) {
@@ -31,9 +32,8 @@ class Loading extends Component {
   getUserId = async () => {
     let profile = null;
     try {
-      profile = (await AsyncStorage.getItem("profile1")) || null;
-      profile = JSON.parse(profile);
-      if (profile) NavigationService.navigate("register", { profile });
+      profile = (await AsyncStorage.getItem("profile")) || null;
+      if (profile) NavigationService.navigate("register");
       else NavigationService.navigate("landing");
     } catch (error) {
       // Error retrieving data
@@ -73,7 +73,8 @@ const RootStack = createAnimatedSwitchNavigator(
 
     registration: createStackNavigator(
       {
-        register: Register
+        register: Register,
+        interests: Interests
       },
       {
         defaultNavigationOptions: {

@@ -24,9 +24,8 @@ router.post(
         provider: req.user.provider,
         email: req.user.emails[0].value,
         id: req.user.id,
-        firstName: req.user.name.givenName,
-        lastName: req.user.name.familyName,
-        photo: null
+        fullName: req.user.name.givenName + " " + req.user.name.familyName,
+        image: null
       });
     } else {
       https
@@ -41,9 +40,9 @@ router.post(
               provider: req.user.provider,
               email: req.user.emails[0].value,
               id: req.user.id,
-              firstName: req.user.name.givenName,
-              lastName: req.user.name.familyName,
-              photo: photoURI
+              fullName:
+                req.user.name.givenName + " " + req.user.name.familyName,
+              image: photoURI
             });
             return;
           });
@@ -59,8 +58,14 @@ router.get("/linkedin/callback", (req, res) => {
   res.redirect(`pushapp://login/${req._parsedOriginalUrl.search}`);
 });
 
+router.post("/confirm", (req, res) => {
+  //Extract req.body and save provider-id to db here!!
+  statusMessage = "Registered!";
+  res.status(200).end();
+});
+
 router.post("/register", (req, res) => {
-  //Extract req.body and save to db here!!
+  //Extract req.body and save/update profile to db here!!
   statusMessage = "Registered!";
   res.status(200).end();
 });

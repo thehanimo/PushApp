@@ -120,23 +120,34 @@ export default class Login extends Component<Props> {
       .then(response => response.json())
       .then(responseJson => {
         if (responseJson) {
-          this.setState({
-            loading: false,
-            authorisedToken: this.props.navigation.getParam("accessToken", ""),
-            timestamp: this.props.navigation.getParam("timestamp", "")
-          });
-          this.props.navigation.navigate("confirm", {
-            profile: responseJson
-          });
+          this.setState(
+            {
+              loading: false,
+              authorisedToken: this.props.navigation.getParam(
+                "accessToken",
+                ""
+              ),
+              timestamp: this.props.navigation.getParam("timestamp", "")
+            },
+            () => {
+              this.props.navigation.navigate("confirm", {
+                profile: responseJson
+              });
+            }
+          );
         }
       })
       .catch(error => {
-        this.setState({
-          loading: false,
-          authorisedToken: this.props.navigation.getParam("accessToken", ""),
-          timestamp: this.props.navigation.getParam("timestamp", "")
-        });
-        alert("Login Failed");
+        this.setState(
+          {
+            loading: false,
+            authorisedToken: this.props.navigation.getParam("accessToken", ""),
+            timestamp: this.props.navigation.getParam("timestamp", "")
+          },
+          () => {
+            alert("Login Failed.");
+          }
+        );
       });
   }
 }
