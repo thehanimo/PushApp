@@ -225,7 +225,9 @@ export default class SearchOverlay extends Component {
               ]}
             />
 
-            <SafeAreaView style={[styles.SAV, { zIndex: 2 }]}>
+            <SafeAreaView
+              style={[styles.SAV, { zIndex: 2, backgroundColor: "red" }]}
+            >
               {this.props.render ? (
                 <TextInput
                   ref={input => {
@@ -240,9 +242,11 @@ export default class SearchOverlay extends Component {
                     alignItems: "center",
                     position: "absolute",
                     top: hp("3%"),
-                    right: 88,
+                    right: 85,
+                    backGroundColor: "red",
                     fontFamily: "Poppins-Regular",
-                    fontSize: 16
+                    fontSize: 16,
+                    zIndex: 2
                   }}
                 />
               ) : null}
@@ -250,14 +254,20 @@ export default class SearchOverlay extends Component {
                 <Animated.View
                   style={{
                     position: "absolute",
-                    top: hp("3%") + 100,
+                    marginTop: hp("3%") + 100,
                     opacity: this.state.flatListOp
                   }}
                 >
-                  <ScrollView>
+                  <ScrollView
+                    keyboardShouldPersistTaps="handled"
+                    keyboardDismissMode="on-drag"
+                    style={{ height: hp("90%") }}
+                  >
                     <FlatList
+                      keyboardShouldPersistTaps="handled"
+                      keyboardDismissMode="on-drag"
                       numColumns={3}
-                      contentContainerStyle={styles.InterestsFlex}
+                      contentContainerStyle={[styles.InterestsFlex]}
                       data={this.state.interests}
                       renderItem={({ item, index }) => (
                         <Interest
