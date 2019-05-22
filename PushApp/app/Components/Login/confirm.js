@@ -46,7 +46,7 @@ export default class Confirm extends Component<Props> {
         Accept: "application/json",
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ profile })
+      body: JSON.stringify(profile)
     })
       .then(response => {
         console.log(response);
@@ -64,7 +64,7 @@ export default class Confirm extends Component<Props> {
           <SafeAreaView style={styles.SAV}>
             <View style={styles.LoadingOverlay}>
               <Thumbnail
-                source={{ uri: profile.image.uri }}
+                source={{ uri: profile.image }}
                 style={styles.Thumbnail}
               />
               <Text style={styles.Name} allowFontScaling={false}>
