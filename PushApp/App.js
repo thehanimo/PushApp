@@ -33,7 +33,7 @@ class Loading extends Component {
     let profile = null;
     try {
       profile = (await AsyncStorage.getItem("profile")) || null;
-      if (profile) NavigationService.navigate("register");
+      if (profile) NavigationService.navigate("interests");
       else NavigationService.navigate("landing");
     } catch (error) {
       // Error retrieving data
