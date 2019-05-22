@@ -34,7 +34,7 @@ class Loading extends Component {
     try {
       profile = (await AsyncStorage.getItem("profile")) || null;
       if (profile) NavigationService.navigate("interests");
-      else NavigationService.navigate("landing");
+      else NavigationService.navigate("interests");
     } catch (error) {
       // Error retrieving data
       alert(error.message);

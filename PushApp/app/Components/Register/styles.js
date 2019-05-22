@@ -9,7 +9,12 @@ export default (styles = StyleSheet.create({
   SAV: {
     flex: 1,
     backgroundColor: "#fff",
-    height: Platform.OS == "ios" ? Dimensions.get("window").height : "100%",
+    height:
+      Platform.OS == "ios"
+        ? Dimensions.get("window").height
+        : Dimensions.get("window").height -
+          ExtraDimensions.getSoftMenuBarHeight() -
+          ExtraDimensions.getStatusBarHeight(),
     position: "relative"
   },
   Header: {
@@ -28,11 +33,16 @@ export default (styles = StyleSheet.create({
     fontSize: 16,
     color: "#807d83"
   },
+  SearchBar: {
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    right: wp("0%") + 50
+  },
   SearchTab: {
     height: 50,
-    width: 100,
-    borderTopLeftRadius: 25,
-    borderBottomLeftRadius: 25,
+    width: 75,
     backgroundColor: "#865ed0",
     justifyContent: "center",
     alignItems: "center",
@@ -47,8 +57,7 @@ export default (styles = StyleSheet.create({
   SelectedInterestsFlex: {
     flexDirection: "row",
     justifyContent: "flex-start",
-    marginTop: 20,
-    paddingBottom: Platform.OS == "ios" ? 100 : 0
+    marginTop: 20
   },
   SelectedInterest: {
     height: 54,

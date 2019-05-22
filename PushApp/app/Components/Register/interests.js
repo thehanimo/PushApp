@@ -10,7 +10,8 @@ import {
   SafeAreaView,
   ScrollView,
   Animated,
-  FlatList
+  FlatList,
+  Platform
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -30,6 +31,7 @@ import {
 import NavigationService from "../../../NavigationService";
 import styles from "./styles";
 import SearchOverlay from "./searchOverlay";
+import { Interest, SelectedInterest } from "./utils";
 
 type Props = {};
 export default class Interests extends Component<Props> {
@@ -38,6 +40,12 @@ export default class Interests extends Component<Props> {
     super(props);
     this.getProfile();
     this.state = {
+      Icon: [new Animated.Value(35), new Animated.Value(0)],
+      searchBar: {
+        width: new Animated.Value(50),
+        borderRadius: new Animated.Value(25),
+        backgroundColor: new Animated.Value(150)
+      },
       ContinueButBottom: new Animated.Value(0),
       searchOverlay: false,
       transitioning: false,
@@ -162,7 +170,7 @@ export default class Interests extends Component<Props> {
       this.setState({ selectedInterests: selectedInterests });
     }, 400);
   };
-  unselectInterest = (item, index) => {
+  unselectInterest = (item, index = null, id = null) => {
     var sIndex;
     var selectedInterests = [...this.state.selectedInterests];
     for (let i = 0; i < selectedInterests.length; i++) {
@@ -172,20 +180,26 @@ export default class Interests extends Component<Props> {
       }
     }
     var interests = [...this.state.interests];
-    interests[index].opacity.setValue(0);
+    if (index || index === 0) {
+      interests[index].opacity.setValue(0);
+    } else {
+      for (let i = 0; i < interests.length; i++) {
+        if (interests[i].id == id) interests[i].opacity.setValue(0);
+      }
+    }
     this.disappear(this.state.selectedInterests[sIndex]);
     setTimeout(() => {
       selectedInterests.splice(sIndex, 1);
       this.state.selectedInterests[sIndex].dim.opacity.setValue(1);
       this.state.selectedInterests[sIndex].dim.width.setValue(95);
-      this.state.selectedInterests[sIndex].dim.height.setValue(120);
+      this.state.selectedInterests[sIndex].dim.height.setValue(220);
       this.setState({
         selectedInterests: selectedInterests,
         interests: interests
       });
     }, 400);
   };
-  selectInterest = (item, index) => {
+  selectInterest = (item, index = null, id = null) => {
     item.dim = {
       width: new Animated.Value(0),
       height: new Animated.Value(0),
@@ -194,7 +208,13 @@ export default class Interests extends Component<Props> {
     var array = [...this.state.selectedInterests];
     array.unshift(item);
     var interests = [...this.state.interests];
-    interests[index].opacity.setValue(1);
+    if (index || index === 0) {
+      interests[index].opacity.setValue(1);
+    } else {
+      for (let i = 0; i < interests.length; i++) {
+        if (interests[i].id == id) interests[i].opacity.setValue(1);
+      }
+    }
     this.setState({ selectedInterests: array, interests: interests }, () => {
       this.appear(item);
     });
@@ -208,7 +228,7 @@ export default class Interests extends Component<Props> {
           duration: 250
         }),
         Animated.timing(item.dim.height, {
-          toValue: 120,
+          toValue: 220,
           duration: 250
         })
       ]),
@@ -247,6 +267,44 @@ export default class Interests extends Component<Props> {
   Continue = () => {
     console.log(this.state.selectedInterests);
   };
+  expandSearchBar = () => {
+    Animated.parallel([
+      Animated.timing(this.state.searchBar.width, {
+        toValue: wp("80%")
+      }),
+      Animated.timing(this.state.searchBar.borderRadius, {
+        toValue: 10
+      }),
+      Animated.timing(this.state.searchBar.backgroundColor, {
+        toValue: 0
+      }),
+      Animated.timing(this.state.Icon[0], {
+        toValue: 60
+      }),
+      Animated.timing(this.state.Icon[1], {
+        toValue: 95
+      })
+    ]).start();
+  };
+  hideSearchBar = () => {
+    Animated.parallel([
+      Animated.timing(this.state.searchBar.width, {
+        toValue: 50
+      }),
+      Animated.timing(this.state.searchBar.borderRadius, {
+        toValue: 25
+      }),
+      Animated.timing(this.state.searchBar.backgroundColor, {
+        toValue: 150
+      }),
+      Animated.timing(this.state.Icon[0], {
+        toValue: 35
+      }),
+      Animated.timing(this.state.Icon[1], {
+        toValue: 0
+      })
+    ]).start();
+  };
   pushDownContinueButton = () => {
     Animated.timing(this.state.ContinueButBottom, {
       toValue: -100,
@@ -260,29 +318,94 @@ export default class Interests extends Component<Props> {
     }).start();
   };
   render() {
+    const interpolateSearchBarColor = this.state.searchBar.backgroundColor.interpolate(
+      {
+        inputRange: [0, 150],
+        outputRange: ["rgba(134, 94, 208, 0.1)", "#865ed0"]
+      }
+    );
     return (
       <Container>
         <Content>
           <SafeAreaView style={styles.SAV}>
             <SearchOverlay
               render={this.state.searchOverlay}
-              whileRender={this.pushDownContinueButton}
-              whileUnRender={this.pushUpContinueButton}
+              selectedInterests={this.state.selectedInterests}
+              whileRender={() => {
+                this.pushDownContinueButton();
+                setTimeout(() => {
+                  this.expandSearchBar();
+                }, 200);
+              }}
+              beforeUnRender={() => {
+                this.hideSearchBar();
+              }}
+              whileUnRender={() => {
+                this.pushUpContinueButton();
+              }}
+              select={(item, id) => {
+                if (!this.state.transitioning)
+                  this.selectInterest(item, null, id);
+              }}
+              unselect={(item, id) => {
+                if (!this.state.transitioning)
+                  this.unselectInterest(item, null, id);
+              }}
             />
-            <View style={{ zIndex: 1 }}>
+            <View
+              style={{
+                zIndex: 1,
+                position: Platform.OS == "ios" ? "relative" : "absolute",
+                height: Platform.OS == "ios" ? null : 100,
+                width: Platform.OS == "ios" ? null : 100,
+                right: 0
+              }}
+            >
               <TouchableOpacity
-                style={styles.SearchTab}
+                activeOpacity={Platform.OS == "ios" ? 0.2 : 1}
+                style={[styles.SearchTab]}
                 onPress={() => {
-                  if (this.state.searchOverlay) {
-                    this.setState({ searchOverlay: false });
-                  } else this.setState({ searchOverlay: true });
+                  if (!this.state.transitioning) {
+                    if (this.state.searchOverlay) {
+                      this.setState({
+                        searchOverlay: false,
+                        transitioning: true
+                      });
+                    } else
+                      this.setState({
+                        searchOverlay: true,
+                        transitioning: true
+                      });
+                    setTimeout(() => {
+                      this.setState({ transitioning: false });
+                    }, 800);
+                  }
                 }}
               >
-                <Icon
-                  type="EvilIcons"
-                  name="search"
-                  style={styles.SearchIcon}
+                <Animated.View
+                  style={[
+                    styles.SearchBar,
+                    {
+                      width: this.state.searchBar.width,
+                      borderRadius: this.state.searchBar.borderRadius,
+                      backgroundColor: interpolateSearchBarColor
+                    }
+                  ]}
                 />
+                <Animated.Text style={{ height: this.state.Icon[0] }}>
+                  <Icon
+                    type="EvilIcons"
+                    name="search"
+                    style={styles.SearchIcon}
+                  />
+                </Animated.Text>
+                <Animated.Text style={{ height: this.state.Icon[1] }}>
+                  <Icon
+                    type="EvilIcons"
+                    name="close"
+                    style={styles.SearchIcon}
+                  />
+                </Animated.Text>
               </TouchableOpacity>
             </View>
             <View>
@@ -347,7 +470,7 @@ export default class Interests extends Component<Props> {
           <TouchableOpacity
             disabled={this.state.transitioning}
             style={[styles.ContinueButton]}
-            // onPress={() => this.Continue()}
+            onPress={() => this.Continue()}
           >
             <Text style={styles.ContinueButtonLabel} allowFontScaling={false}>
               Continue
@@ -360,95 +483,4 @@ export default class Interests extends Component<Props> {
   remove = () => {
     this.setState({ loading: false });
   };
-}
-
-class SelectedInterest extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <Animated.View
-        style={{
-          position: "relative",
-          width: this.props.dim.width,
-          height: this.props.dim.height,
-          opacity: this.props.dim.opacity
-        }}
-      >
-        <View style={styles.SelectedInterest}>
-          <Image
-            source={{ uri: this.props.image }}
-            style={styles.SelectedInterestImage}
-          />
-        </View>
-        <Animated.Text
-          style={styles.SelectedInterestLabel}
-          allowFontScaling={false}
-          numberOfLines={2}
-        >
-          {this.props.label}
-        </Animated.Text>
-        <TouchableOpacity
-          style={styles.RemoveIconButton}
-          onPress={() => {
-            this.props.remove();
-          }}
-        >
-          <Icon type="EvilIcons" name="close" style={styles.RemoveIcon} />
-        </TouchableOpacity>
-      </Animated.View>
-    );
-  }
-}
-
-class Interest extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      overlay: false
-    };
-  }
-  render() {
-    return (
-      <View>
-        <TouchableOpacity
-          style={styles.Interest}
-          onPress={() => {
-            if (this.props.opacity.__getValue() == 1) {
-              this.props.unselect();
-            } else {
-              this.props.select();
-            }
-          }}
-        >
-          <Image
-            source={{ uri: this.props.image }}
-            style={styles.InterestImage}
-          />
-          <Animated.View
-            style={[styles.InterestOverlay, { opacity: this.props.opacity }]}
-          >
-            <Icon
-              type="MaterialIcons"
-              name="done"
-              style={{
-                position: "absolute",
-                alignSelf: "center",
-                color: "#fff"
-              }}
-              allowFontScaling={false}
-            />
-          </Animated.View>
-        </TouchableOpacity>
-        <Text
-          style={styles.InterestLabel}
-          numberOfLines={2}
-          allowFontScaling={false}
-        >
-          {this.props.label}
-        </Text>
-      </View>
-    );
-  }
 }
