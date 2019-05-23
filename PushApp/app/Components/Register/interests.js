@@ -11,13 +11,16 @@ import {
   ScrollView,
   Animated,
   FlatList,
-  Platform
+  Platform,
+  Easing,
+  ActivityIndicator
 } from "react-native";
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-community/async-storage";
+import { BlurView, VibrancyView } from "@react-native-community/blur";
 import {
   Container,
   Content,
@@ -40,7 +43,8 @@ export default class Interests extends Component<Props> {
     super(props);
     this.getProfile();
     this.state = {
-      Icon: [new Animated.Value(35), new Animated.Value(0)],
+      fetching: false,
+      Icon: [new Animated.Value(1), new Animated.Value(0)],
       searchBar: {
         width: new Animated.Value(50),
         borderRadius: new Animated.Value(25),
@@ -59,82 +63,25 @@ export default class Interests extends Component<Props> {
         referral: null
       },
       selectedInterests: [],
-      interests: [
-        {
-          image: "https://picsum.photos/id/111/200/200",
-          label: "Technology",
-          id: 2,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/112/200/200",
-          label: "Business",
-          id: 3,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/311/200/200",
-          label: "Artificial Intelligence",
-          id: 4,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/411/200/200",
-          label: "Marketing",
-          id: 5,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/115/200/200",
-          label: "Finance",
-          id: 6,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/62/200/200",
-          label: "Travel",
-          id: 7,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/27/200/200",
-          label: "Machine Learning",
-          id: 8,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 9,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 10,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 11,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 12,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 13,
-          opacity: new Animated.Value(0)
-        }
-      ]
+      interests: []
     };
   }
+
+  componentDidMount() {
+    this.fetchData();
+  }
+  fetchData = async () => {
+    this.setState({ fetching: true });
+    const response = await fetch(
+      `http://192.168.0.103:3000/api/interests/top/9`
+    );
+    const json = await response.json();
+    json.interests.forEach(element => {
+      element.opacity = new Animated.Value(0);
+    });
+    this.setState({ fetching: false, interests: json.interests });
+  };
+
   getProfile = async () => {
     let profile = null;
     try {
@@ -166,7 +113,7 @@ export default class Interests extends Component<Props> {
       selectedInterests.splice(index, 1);
       this.state.selectedInterests[index].dim.opacity.setValue(1);
       this.state.selectedInterests[index].dim.width.setValue(95);
-      this.state.selectedInterests[index].dim.height.setValue(120);
+      this.state.selectedInterests[index].dim.height.setValue(220);
       this.setState({ selectedInterests: selectedInterests });
     }, 400);
   };
@@ -279,10 +226,15 @@ export default class Interests extends Component<Props> {
         toValue: 0
       }),
       Animated.timing(this.state.Icon[0], {
-        toValue: 60
+        toValue: 0,
+        duration: 250,
+        easing: Easing.quad
       }),
       Animated.timing(this.state.Icon[1], {
-        toValue: 95
+        toValue: 1,
+        duration: 250,
+        delay: 200,
+        easing: Easing.quad
       })
     ]).start();
   };
@@ -298,10 +250,15 @@ export default class Interests extends Component<Props> {
         toValue: 150
       }),
       Animated.timing(this.state.Icon[0], {
-        toValue: 35
+        toValue: 1,
+        duration: 250,
+        delay: 200,
+        easing: Easing.quad
       }),
       Animated.timing(this.state.Icon[1], {
-        toValue: 0
+        toValue: 0,
+        duration: 250,
+        easing: Easing.quad
       })
     ]).start();
   };
@@ -392,14 +349,20 @@ export default class Interests extends Component<Props> {
                     }
                   ]}
                 />
-                <Animated.Text style={{ height: this.state.Icon[0] }}>
+                <Animated.Text
+                  allowFontScaling={false}
+                  style={{ opacity: this.state.Icon[0] }}
+                >
                   <Icon
                     type="EvilIcons"
                     name="search"
                     style={styles.SearchIcon}
                   />
                 </Animated.Text>
-                <Animated.Text style={{ height: this.state.Icon[1] }}>
+                <Animated.Text
+                  allowFontScaling={false}
+                  style={{ opacity: this.state.Icon[1], position: "absolute" }}
+                >
                   <Icon
                     type="EvilIcons"
                     name="close"
@@ -415,6 +378,7 @@ export default class Interests extends Component<Props> {
               <Text style={styles.SubHeader} allowFontScaling={false}>
                 Select a minimum of 5 Interests
               </Text>
+              {this.state.fetching ? <ActivityIndicator /> : null}
             </View>
 
             <ScrollView
@@ -422,6 +386,7 @@ export default class Interests extends Component<Props> {
               showsHorizontalScrollIndicator={false}
             >
               <FlatList
+                keyExtractor={(item, index) => item.id.toString()}
                 horizontal={true}
                 contentContainerStyle={styles.SelectedInterestsFlex}
                 data={this.state.selectedInterests}
@@ -444,6 +409,7 @@ export default class Interests extends Component<Props> {
 
             <ScrollView>
               <FlatList
+                keyExtractor={(item, index) => item.id.toString()}
                 numColumns={3}
                 contentContainerStyle={styles.InterestsFlex}
                 data={this.state.interests}

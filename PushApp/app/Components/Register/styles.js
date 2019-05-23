@@ -100,10 +100,10 @@ export default (styles = StyleSheet.create({
   },
   InterestsFlex: {
     flex: 1,
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: "column",
     justifyContent: "space-around",
-    paddingBottom: 100
+    paddingBottom: 100,
+    alignSelf: "center"
   },
   Interest: {
     height: 80,

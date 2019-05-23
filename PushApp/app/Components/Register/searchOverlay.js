@@ -13,7 +13,8 @@ import {
   FlatList,
   Platform,
   Dimensions,
-  Easing
+  Easing,
+  ActivityIndicator
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
 import {
@@ -38,88 +39,37 @@ export default class SearchOverlay extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      fetching: false,
       flatListOp: new Animated.Value(0),
       visible: false,
       height: new Animated.Value(0),
       width: new Animated.Value(0),
       borderRadius: new Animated.Value(hp("100%")),
       selectedInterests: [],
-      interests: [
-        {
-          image: "https://picsum.photos/id/111/200/200",
-          label: "Technology",
-          id: 2,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/112/200/200",
-          label: "Business",
-          id: 3,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/311/200/200",
-          label: "Artificial Intelligence",
-          id: 4,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/411/200/200",
-          label: "Marketing",
-          id: 5,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/115/200/200",
-          label: "Finance",
-          id: 6,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/62/200/200",
-          label: "Travel",
-          id: 7,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/27/200/200",
-          label: "Machine Learning",
-          id: 8,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 9,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 10,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 11,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 12,
-          opacity: new Animated.Value(0)
-        },
-        {
-          image: "https://picsum.photos/id/84/200/200",
-          label: "Data Structures",
-          id: 13,
-          opacity: new Animated.Value(0)
-        }
-      ]
+      interests: []
     };
+    timer = null;
   }
+  fetchData = async text => {
+    if (this.timer) clearTimeout(this.timer);
+    text = text.trimLeft();
+    if (text) {
+      this.timer = setTimeout(async () => {
+        this.setState({ fetching: true });
+        const response = await fetch(
+          `http://192.168.0.103:3000/api/interests/${text}`
+        );
+        const json = await response.json();
+        json.interests.forEach(element => {
+          element.opacity = new Animated.Value(0);
+        });
+        this.setState({ fetching: false, interests: json.interests }, () =>
+          this.checkSelected()
+        );
+      }, 500);
+      alert(json.interests[0]);
+    }
+  };
   checkSelected = () => {
     var interests = [...this.state.interests];
     var selectedInterests = this.props.selectedInterests;
@@ -161,13 +111,11 @@ export default class SearchOverlay extends Component {
       })
     ]).start();
     setTimeout(() => {
-      try {
-        this.search.focus();
-      } catch {}
+      this.search.focus();
       Animated.timing(this.state.flatListOp, {
         toValue: 1
       }).start();
-    }, 600);
+    }, 700);
     this.checkSelected();
     this.props.whileRender();
   };
@@ -212,6 +160,8 @@ export default class SearchOverlay extends Component {
     return (
       <React.Fragment>
         {Platform.OS == "ios" ? (
+          //IOS ONLY!!
+
           <React.Fragment>
             <Animated.View
               style={[
@@ -225,28 +175,37 @@ export default class SearchOverlay extends Component {
               ]}
             />
 
-            <SafeAreaView
-              style={[styles.SAV, { zIndex: 2, backgroundColor: "red" }]}
-            >
+            <SafeAreaView style={[{ zIndex: 2, backgroundColor: "red" }]}>
               {this.props.render ? (
                 <TextInput
                   ref={input => {
                     this.search = input;
                   }}
+                  onChangeText={text => {
+                    this.fetchData(text);
+                  }}
                   style={{
                     height: 50,
-                    width: wp("80%") - 50,
+                    width: wp("80%") - 60,
                     borderTopLeftRadius: 0,
                     borderBottomLeftRadius: 0,
                     justifyContent: "center",
                     alignItems: "center",
                     position: "absolute",
                     top: hp("3%"),
-                    right: 85,
-                    backGroundColor: "red",
+                    right: 100,
                     fontFamily: "Poppins-Regular",
                     fontSize: 16,
                     zIndex: 2
+                  }}
+                />
+              ) : null}
+              {this.state.fetching ? (
+                <ActivityIndicator
+                  style={{
+                    position: "absolute",
+                    top: hp("3%") + 15,
+                    right: 85
                   }}
                 />
               ) : null}
@@ -261,7 +220,10 @@ export default class SearchOverlay extends Component {
                   <ScrollView
                     keyboardShouldPersistTaps="handled"
                     keyboardDismissMode="on-drag"
-                    style={{ height: hp("90%") }}
+                    style={{
+                      alignSelf: "center",
+                      width: wp("100%")
+                    }}
                   >
                     <FlatList
                       keyboardShouldPersistTaps="handled"
@@ -289,6 +251,8 @@ export default class SearchOverlay extends Component {
             </SafeAreaView>
           </React.Fragment>
         ) : (
+          //ANDROID ONLY!!!
+
           <Animated.View
             style={[
               styles.SearchOverlay,
@@ -305,6 +269,9 @@ export default class SearchOverlay extends Component {
                 <TextInput
                   ref={input => {
                     this.search = input;
+                  }}
+                  onChangeText={text => {
+                    this.fetchData(text);
                   }}
                   style={{
                     height: 50,
@@ -329,8 +296,17 @@ export default class SearchOverlay extends Component {
                     opacity: this.state.flatListOp
                   }}
                 >
-                  <ScrollView>
+                  <ScrollView
+                    keyboardShouldPersistTaps="handled"
+                    keyboardDismissMode="on-drag"
+                    style={{
+                      alignSelf: "center",
+                      width: wp("100%")
+                    }}
+                  >
                     <FlatList
+                      keyboardShouldPersistTaps="handled"
+                      keyboardDismissMode="on-drag"
                       numColumns={3}
                       contentContainerStyle={styles.InterestsFlex}
                       data={this.state.interests}
