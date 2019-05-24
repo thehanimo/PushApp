@@ -17,6 +17,8 @@ import {
   ActivityIndicator
 } from "react-native";
 import AsyncStorage from "@react-native-community/async-storage";
+import ExtraDimensions from "react-native-extra-dimensions-android";
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp
@@ -63,9 +65,14 @@ export default class SearchOverlay extends Component {
         json.interests.forEach(element => {
           element.opacity = new Animated.Value(0);
         });
-        this.setState({ fetching: false, interests: json.interests }, () =>
-          this.checkSelected()
-        );
+        this.state.flatListOp.setValue(0);
+        this.setState({ fetching: false, interests: json.interests }, () => {
+          this.checkSelected();
+          Animated.timing(this.state.flatListOp, {
+            toValue: 1,
+            delay: 200
+          }).start();
+        });
       }, 500);
       alert(json.interests[0]);
     }
@@ -94,7 +101,11 @@ export default class SearchOverlay extends Component {
     Animated.parallel([
       Animated.timing(this.state.height, {
         toValue:
-          Platform.OS == "ios" ? Dimensions.get("window").height : hp("100%"),
+          Platform.OS == "ios"
+            ? Dimensions.get("window").height
+            : Dimensions.get("window").height -
+              ExtraDimensions.getSoftMenuBarHeight() -
+              ExtraDimensions.getStatusBarHeight(),
         duration: 600,
         easing: Easing.quad
       }),
@@ -222,7 +233,8 @@ export default class SearchOverlay extends Component {
                     keyboardDismissMode="on-drag"
                     style={{
                       alignSelf: "center",
-                      width: wp("100%")
+                      width: wp("100%"),
+                      height: hp("70%")
                     }}
                   >
                     <FlatList
@@ -301,7 +313,8 @@ export default class SearchOverlay extends Component {
                     keyboardDismissMode="on-drag"
                     style={{
                       alignSelf: "center",
-                      width: wp("100%")
+                      width: wp("100%"),
+                      height: hp("70%")
                     }}
                   >
                     <FlatList

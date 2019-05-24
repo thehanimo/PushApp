@@ -13,7 +13,8 @@ import {
   FlatList,
   Platform,
   Easing,
-  ActivityIndicator
+  ActivityIndicator,
+  findNodeHandle
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -43,6 +44,10 @@ export default class Interests extends Component<Props> {
     super(props);
     this.getProfile();
     this.state = {
+      viewRef: null,
+      errorOverlay: false,
+      errorOverlayOpacity: new Animated.Value(0),
+      errorDialogOpacity: new Animated.Value(0),
       fetching: false,
       Icon: [new Animated.Value(1), new Animated.Value(0)],
       searchBar: {
@@ -51,6 +56,7 @@ export default class Interests extends Component<Props> {
         backgroundColor: new Animated.Value(150)
       },
       ContinueButBottom: new Animated.Value(0),
+      ContinueButOpacity: new Animated.Value(1),
       searchOverlay: false,
       transitioning: false,
       profile: {
@@ -69,6 +75,7 @@ export default class Interests extends Component<Props> {
 
   componentDidMount() {
     this.fetchData();
+    this.setState({ viewRef: findNodeHandle(this.mainBackground) });
   }
   fetchData = async () => {
     this.setState({ fetching: true });
@@ -263,16 +270,54 @@ export default class Interests extends Component<Props> {
     ]).start();
   };
   pushDownContinueButton = () => {
-    Animated.timing(this.state.ContinueButBottom, {
-      toValue: -100,
-      delay: 50
-    }).start();
+    Animated.parallel([
+      Animated.timing(this.state.ContinueButBottom, {
+        toValue: -100,
+        delay: 50
+      }),
+      Animated.timing(this.state.ContinueButOpacity, {
+        toValue: 0,
+        delay: 50
+      })
+    ]).start();
   };
   pushUpContinueButton = () => {
-    Animated.timing(this.state.ContinueButBottom, {
-      toValue: 0,
-      delay: 100
-    }).start();
+    Animated.parallel([
+      Animated.timing(this.state.ContinueButBottom, {
+        toValue: 0,
+        delay: 100
+      }),
+      Animated.timing(this.state.ContinueButOpacity, {
+        toValue: 1,
+        delay: 100
+      })
+    ]).start();
+  };
+
+  closeErrorOverlay = () => {
+    Animated.stagger(250, [
+      Animated.timing(this.state.errorDialogOpacity, {
+        toValue: 0
+      }),
+      Animated.timing(this.state.errorOverlayOpacity, {
+        toValue: 0
+      })
+    ]).start();
+    setTimeout(() => {
+      this.setState({ errorOverlay: false });
+    }, 500);
+  };
+  openErrorOverlay = () => {
+    this.setState({ errorOverlay: true }, () => {
+      Animated.stagger(250, [
+        Animated.timing(this.state.errorOverlayOpacity, {
+          toValue: 1
+        }),
+        Animated.timing(this.state.errorDialogOpacity, {
+          toValue: 1
+        })
+      ]).start();
+    });
   };
   render() {
     const interpolateSearchBarColor = this.state.searchBar.backgroundColor.interpolate(
@@ -283,7 +328,11 @@ export default class Interests extends Component<Props> {
     );
     return (
       <Container>
-        <Content>
+        <Content
+          ref={bg => {
+            this.mainBackground = bg;
+          }}
+        >
           <SafeAreaView style={styles.SAV}>
             <SearchOverlay
               render={this.state.searchOverlay}
@@ -431,18 +480,116 @@ export default class Interests extends Component<Props> {
               />
             </ScrollView>
           </SafeAreaView>
-        </Content>
-        <Animated.View style={{ bottom: this.state.ContinueButBottom }}>
-          <TouchableOpacity
-            disabled={this.state.transitioning}
-            style={[styles.ContinueButton]}
-            onPress={() => this.Continue()}
+          <Animated.View
+            style={{
+              bottom: this.state.ContinueButBottom,
+              opacity: this.state.ContinueButOpacity
+            }}
           >
-            <Text style={styles.ContinueButtonLabel} allowFontScaling={false}>
-              Continue
-            </Text>
-          </TouchableOpacity>
-        </Animated.View>
+            <TouchableOpacity
+              disabled={this.state.transitioning}
+              style={[styles.ContinueButton]}
+              onPress={() => {
+                if (!this.state.transitioning) {
+                  if (this.state.selectedInterests.length > 4) {
+                    alert("Next stop.. HOME SCREEN!!");
+                  } else this.openErrorOverlay();
+                }
+              }}
+            >
+              <Text style={styles.ContinueButtonLabel} allowFontScaling={false}>
+                Continue
+              </Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </Content>
+        {this.state.errorOverlay ? (
+          <Animated.View
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              bottom: 0,
+              right: 0,
+              alignItems: "center",
+              justifyContent: "center",
+              alignContent: "center",
+              opacity: this.state.errorOverlayOpacity
+            }}
+          >
+            <BlurView
+              viewRef={this.state.viewRef}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                bottom: 0,
+                right: 0,
+                alignItems: "center",
+                justifyContent: "center",
+                alignContent: "center"
+              }}
+              blurType="dark"
+              blurAmount={5}
+            />
+            <Animated.View
+              style={{
+                height: 200,
+                width: 300,
+                position: "absolute",
+                alignSelf: "center",
+                alignItems: "center",
+                justifyContent: "center",
+                top: hp("50%") - 100,
+                backgroundColor: "#fff",
+                shadowColor: "rgba(0, 0, 0, 0.6)",
+                shadowOffset: { width: 0, height: 0 },
+                shadowOpacity: 1,
+                shadowRadius: 12,
+                elevation: 2,
+                opacity: this.state.errorDialogOpacity
+              }}
+            >
+              <Text
+                allowFontScaling={false}
+                style={{
+                  fontFamily: "Poppins-Light",
+                  fontSize: 16,
+                  color: "#807d83",
+                  textAlign: "center",
+                  width: 210
+                }}
+              >
+                Please select a minimum of 5 Interests
+              </Text>
+              <TouchableOpacity
+                onPress={this.closeErrorOverlay}
+                style={{
+                  marginTop: 20,
+                  width: 150,
+                  height: 45,
+                  backgroundColor: "#865ed0",
+                  justifyContent: "center",
+                  borderRadius: 8,
+                  shadowColor: "rgba(134, 94, 208, 1)",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.5,
+                  shadowRadius: 2
+                }}
+              >
+                <Text
+                  allowFontScaling={false}
+                  style={[
+                    styles.ContinueButtonLabel,
+                    { fontSize: 16, alignSelf: "center" }
+                  ]}
+                >
+                  OK
+                </Text>
+              </TouchableOpacity>
+            </Animated.View>
+          </Animated.View>
+        ) : null}
       </Container>
     );
   }
