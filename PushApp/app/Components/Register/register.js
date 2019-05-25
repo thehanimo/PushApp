@@ -573,7 +573,7 @@ export default class Register extends Component<Props> {
               </TouchableOpacity>
 
               <View
-                style={{ height: 60 }} //Buffer to avoid Button Overlap
+                style={{ height: 150 }} //Buffer to avoid Button Overlap
               />
             </ScrollView>
           </SafeAreaView>

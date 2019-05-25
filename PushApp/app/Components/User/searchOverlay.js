@@ -249,9 +249,7 @@ export default class SearchOverlay extends Component {
                       width: wp("100%"),
                       height: hp("70%")
                     }}
-                  >
-                    )} />
-                  </ScrollView>
+                  />
                 </Animated.View>
               ) : null}
             </SafeAreaView>

@@ -69,8 +69,10 @@ export default (styles = StyleSheet.create({
     shadowOffset: { width: 3, height: 6 },
     shadowOpacity: 1,
     shadowRadius: 12,
-    elevation: 2,
+    elevation: 5,
     marginLeft: wp("8%"),
+    marginBottom: 10,
+    marginTop: 10,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8
   },
@@ -118,7 +120,7 @@ export default (styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 1,
     shadowRadius: 6,
-    elevation: 2
+    elevation: 5
   },
   NotificationCardImage: {
     width: "14%",
@@ -169,7 +171,9 @@ export default (styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 1,
     shadowRadius: 3,
-    elevation: 2,
+    elevation: 5,
+    marginBottom: 10,
+    marginTop: 10,
     marginLeft: wp("4%"),
     borderRadius: 8
   },

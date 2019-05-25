@@ -236,28 +236,7 @@ export default class SearchOverlay extends Component {
                       width: wp("100%"),
                       height: hp("70%")
                     }}
-                  >
-                    <FlatList
-                      keyboardShouldPersistTaps="handled"
-                      keyboardDismissMode="on-drag"
-                      numColumns={3}
-                      contentContainerStyle={[styles.InterestsFlex]}
-                      data={this.state.interests}
-                      renderItem={({ item, index }) => (
-                        <Interest
-                          image={item.image}
-                          label={item.label}
-                          select={() => {
-                            this.selectInterest(item, index);
-                          }}
-                          unselect={() => {
-                            this.unselectInterest(item, index);
-                          }}
-                          opacity={item.opacity}
-                        />
-                      )}
-                    />
-                  </ScrollView>
+                  />
                 </Animated.View>
               ) : null}
             </SafeAreaView>
@@ -316,28 +295,7 @@ export default class SearchOverlay extends Component {
                       width: wp("100%"),
                       height: hp("70%")
                     }}
-                  >
-                    <FlatList
-                      keyboardShouldPersistTaps="handled"
-                      keyboardDismissMode="on-drag"
-                      numColumns={3}
-                      contentContainerStyle={styles.InterestsFlex}
-                      data={this.state.interests}
-                      renderItem={({ item, index }) => (
-                        <Interest
-                          image={item.image}
-                          label={item.label}
-                          select={() => {
-                            this.selectInterest(item, index);
-                          }}
-                          unselect={() => {
-                            this.unselectInterest(item, index);
-                          }}
-                          opacity={item.opacity}
-                        />
-                      )}
-                    />
-                  </ScrollView>
+                  />
                 </Animated.View>
               ) : null}
             </SafeAreaView>
@@ -346,14 +304,4 @@ export default class SearchOverlay extends Component {
       </React.Fragment>
     );
   }
-  unselectInterest = (item, index = null) => {
-    var interests = [...this.state.interests];
-    interests[index].opacity.setValue(0);
-    this.props.unselect(item, interests[index].id);
-  };
-  selectInterest = (item, index) => {
-    var interests = [...this.state.interests];
-    interests[index].opacity.setValue(1);
-    this.props.select(item, interests[index].id);
-  };
 }

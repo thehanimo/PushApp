@@ -87,6 +87,9 @@ export default class Profile extends Component {
       ]
     };
   }
+  imageLoaded() {
+    this.setState({ viewRef: findNodeHandle(this.imageBg) });
+  }
   getProfile = async () => {
     let profile = null;
     try {
@@ -130,8 +133,9 @@ export default class Profile extends Component {
                     this.imageBg = bg;
                   }}
                   source={{ uri: this.state.profile.image }}
+                  onLoadEnd={this.imageLoaded.bind(this)}
                   style={{
-                    height: wp("100%") / 2,
+                    height: wp("50%"),
                     width: "100%",
                     position: "absolute",
                     resizeMode: "cover"
@@ -142,14 +146,25 @@ export default class Profile extends Component {
                   style={{
                     position: "absolute",
                     top: 0,
-                    height: wp("100%") / 2,
-                    width: "100%",
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
                     alignItems: "center",
                     justifyContent: "center",
                     alignContent: "center"
                   }}
                   blurType="dark"
                   blurAmount={4}
+                />
+                {/* PARTIAL SCREEN BLUR FIX */}
+                <View
+                  style={{
+                    height: hp("50%"),
+                    width: "100%",
+                    position: "absolute",
+                    top: wp("50%"),
+                    backgroundColor: "#f8f8f8"
+                  }}
                 />
 
                 <View style={{ position: "relative" }}>
@@ -163,7 +178,8 @@ export default class Profile extends Component {
                       shadowColor: "rgba(0, 0, 0, 0.16)",
                       shadowOffset: { width: 0, height: 2 },
                       shadowOpacity: 0.8,
-                      shadowRadius: 10
+                      shadowRadius: 10,
+                      elevation: 5
                     }}
                   >
                     <Text
@@ -211,7 +227,8 @@ export default class Profile extends Component {
                     style={{
                       width: wp("100%"),
                       backgroundColor: "#fff",
-                      marginTop: 15
+                      marginTop: 15,
+                      elevation: 5
                     }}
                   >
                     <Text
@@ -298,6 +315,7 @@ export default class Profile extends Component {
                       keyExtractor={(item, index) => index.toString()}
                       horizontal={true}
                       contentContainerStyle={{
+                        marginLeft: 10,
                         marginBottom: 20
                       }}
                       data={this.state.expertise}
@@ -328,7 +346,8 @@ export default class Profile extends Component {
                       borderRadius: 65,
                       alignSelf: "center",
                       position: "absolute",
-                      top: wp("100%") / 6
+                      top: wp("100%") / 6,
+                      elevation: 10
                     }}
                   />
                   <TouchableOpacity
