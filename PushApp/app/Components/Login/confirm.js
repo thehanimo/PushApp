@@ -31,7 +31,7 @@ export default class Confirm extends Component<Props> {
 
   saveProfile = async profile => {
     try {
-      await AsyncStorage.setItem("profile", JSON.stringify(profile));
+      await AsyncStorage.setItem("user", JSON.stringify(profile));
       NavigationService.navigate("register");
     } catch (error) {
       // Error retrieving data

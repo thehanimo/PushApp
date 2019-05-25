@@ -11,6 +11,10 @@ import {
   SafeAreaView
 } from "react-native";
 import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+import {
   Container,
   Content,
   Header,
@@ -43,18 +47,8 @@ export default class Login extends Component<Props> {
       this.state.loading &&
       this.props.navigation.getParam("accessToken", "") != "" //Remove to accept login callback after timeout and loading disappearance.
     ) {
-      loader = (
-        <View style={styles.LoadingOverlay}>
-          <View style={styles.Loader} />
-        </View>
-      );
       this.authenticate(this.props.navigation.getParam("accessToken", ""));
-    } else if (this.state.loading)
-      loader = (
-        <View style={styles.LoadingOverlay}>
-          <View style={styles.Loader} />
-        </View>
-      );
+    }
     return (
       <Container>
         <Content>
@@ -90,7 +84,7 @@ export default class Login extends Component<Props> {
               </Text>
             </View>
           </SafeAreaView>
-          {loader}
+          {this.state.loading ? <Loader /> : null}
         </Content>
       </Container>
     );
@@ -149,5 +143,40 @@ export default class Login extends Component<Props> {
           }
         );
       });
+  }
+}
+
+export class Loader extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          height: "100%",
+          width: wp("100%"),
+          backgroundColor: "#ffffff",
+          opacity: 0.925,
+          justifyContent: "center",
+          alignItems: "center",
+          elevation: 3
+        }}
+      >
+        <View
+          style={{
+            width: 138,
+            height: 138,
+            borderStyle: "solid",
+            borderColor: "#3d83d9",
+            borderWidth: 3,
+            borderRadius: 69
+          }}
+        />
+      </View>
+    );
   }
 }

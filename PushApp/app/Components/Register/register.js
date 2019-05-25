@@ -23,6 +23,12 @@ import {
 } from "native-base";
 import ImagePicker from "react-native-image-crop-picker";
 import NavigationService from "../../../NavigationService";
+
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp
+} from "react-native-responsive-screen";
+import Loader from "../Login/login";
 import styles from "./styles";
 
 type Props = {};
@@ -31,6 +37,7 @@ export default class Register extends Component<Props> {
     super(props);
     this.getProfile();
     this.state = {
+      loading: false,
       provider: "",
       id: "",
       image: { uri: null },
@@ -72,6 +79,7 @@ export default class Register extends Component<Props> {
           view: { borderColor: "#E8E7E9" },
           icon: { opacity: 0 },
           value: "",
+          valid: true,
           required: false
         }
       },
@@ -84,10 +92,12 @@ export default class Register extends Component<Props> {
   getProfile = async () => {
     let profile = null;
     try {
-      profile = (await AsyncStorage.getItem("profile")) || null;
+      this.setState({ loading: true });
+      profile = (await AsyncStorage.getItem("user")) || null;
       profile = JSON.parse(profile);
       this.setState(
         {
+          loading: false,
           provider: profile.provider,
           id: profile.id,
           image: { uri: profile.image },
@@ -116,12 +126,6 @@ export default class Register extends Component<Props> {
               value: profile.city || "",
               valid: profile.city ? true : false,
               icon: { opacity: profile.city ? 1 : 0 }
-            },
-            referral: {
-              ...this.state.fields.referral,
-              value: profile.referral || "",
-              valid: profile.referral ? true : false,
-              icon: { opacity: profile.referral ? 1 : 0 }
             }
           }
         },
@@ -257,6 +261,7 @@ export default class Register extends Component<Props> {
   };
 
   Register = async () => {
+    this.setState({ loading: true });
     var updatedProfile = {
       provider: this.state.provider,
       id: this.state.id,
@@ -276,11 +281,13 @@ export default class Register extends Component<Props> {
       body: JSON.stringify(updatedProfile)
     })
       .then(response => {
+        this.setState({ loading: false });
         this.saveProfile(updatedProfile, () => {
           NavigationService.navigate("interests");
         });
       })
       .catch(error => {
+        this.setState({ loading: false });
         alert(error);
       });
   };
@@ -289,7 +296,10 @@ export default class Register extends Component<Props> {
       <Container>
         <Content>
           <SafeAreaView style={styles.SAV}>
-            <ScrollView>
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              keyboardDismissMode="on-drag"
+            >
               <Text style={styles.Header} allowFontScaling={false}>
                 Register to complete your Profile
               </Text>
@@ -567,6 +577,33 @@ export default class Register extends Component<Props> {
               />
             </ScrollView>
           </SafeAreaView>
+          {this.state.loading ? (
+            <View
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                height: hp("100%"),
+                width: wp("100%"),
+                backgroundColor: "#ffffff",
+                opacity: 0.925,
+                justifyContent: "center",
+                alignItems: "center",
+                elevation: 3
+              }}
+            >
+              <View
+                style={{
+                  width: 138,
+                  height: 138,
+                  borderStyle: "solid",
+                  borderColor: "#3d83d9",
+                  borderWidth: 3,
+                  borderRadius: 69
+                }}
+              />
+            </View>
+          ) : null}
         </Content>
         <TouchableOpacity
           disabled={this.state.buttonDisabled}

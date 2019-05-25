@@ -107,7 +107,6 @@ const interestsCollection = [
 ];
 
 router.get("/interests/:searchExp", function(req, res) {
-  console.log(req.params.searchExp);
   var interests = [];
   interestsCollection.forEach(interest => {
     if (interest.label.includes(req.params.searchExp)) interests.push(interest);

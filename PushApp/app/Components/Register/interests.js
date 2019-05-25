@@ -21,7 +21,7 @@ import {
   heightPercentageToDP as hp
 } from "react-native-responsive-screen";
 import AsyncStorage from "@react-native-community/async-storage";
-import { BlurView, VibrancyView } from "@react-native-community/blur";
+import { BlurView } from "@react-native-community/blur";
 import {
   Container,
   Content,
@@ -40,9 +40,7 @@ import { Interest, SelectedInterest } from "./utils";
 type Props = {};
 export default class Interests extends Component<Props> {
   constructor(props) {
-    console.disableYellowBox = true;
     super(props);
-    this.getProfile();
     this.state = {
       viewRef: null,
       errorOverlay: false,
@@ -89,14 +87,10 @@ export default class Interests extends Component<Props> {
     this.setState({ fetching: false, interests: json.interests });
   };
 
-  getProfile = async () => {
-    let profile = null;
+  saveInterests = async (interests, callback) => {
     try {
-      profile = (await AsyncStorage.getItem("profile")) || null;
-      profile = JSON.parse(profile);
-      this.setState({
-        profile: { ...profile, image: { uri: profile.image } }
-      });
+      await AsyncStorage.setItem("interests", JSON.stringify(interests));
+      callback();
     } catch (error) {
       // Error retrieving data
       alert(error.message);
@@ -219,7 +213,9 @@ export default class Interests extends Component<Props> {
     }, 400);
   };
   Continue = () => {
-    console.log(this.state.selectedInterests);
+    this.saveInterests(this.state.selectedInterests, () => {
+      NavigationService.navigate("home");
+    });
   };
   expandSearchBar = () => {
     Animated.parallel([
@@ -295,12 +291,14 @@ export default class Interests extends Component<Props> {
   };
 
   closeErrorOverlay = () => {
-    Animated.stagger(250, [
+    Animated.stagger(100, [
       Animated.timing(this.state.errorDialogOpacity, {
-        toValue: 0
+        toValue: 0,
+        duration: 250
       }),
       Animated.timing(this.state.errorOverlayOpacity, {
-        toValue: 0
+        toValue: 0,
+        duration: 250
       })
     ]).start();
     setTimeout(() => {
@@ -314,7 +312,8 @@ export default class Interests extends Component<Props> {
           toValue: 1
         }),
         Animated.timing(this.state.errorDialogOpacity, {
-          toValue: 1
+          toValue: 1,
+          duration: 250
         })
       ]).start();
     });
@@ -492,7 +491,7 @@ export default class Interests extends Component<Props> {
               onPress={() => {
                 if (!this.state.transitioning) {
                   if (this.state.selectedInterests.length > 4) {
-                    alert("Next stop.. HOME SCREEN!!");
+                    this.Continue();
                   } else this.openErrorOverlay();
                 }
               }}
