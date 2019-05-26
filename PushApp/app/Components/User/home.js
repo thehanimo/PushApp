@@ -30,18 +30,34 @@ import NavigationService from "../../../NavigationService";
 import styles from "./styles";
 import { SafeAreaView } from "react-navigation";
 import SearchOverlay from "./searchOverlay";
-import { MainCard, NotificationCard } from "./utils";
+import { MainCard, NotificationCard, PostDetail } from "./utils";
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showPostDetail: false,
       searchOverlay: false,
       Icon: [new Animated.Value(1), new Animated.Value(0)],
       searchBar: {
         width: new Animated.Value(50),
         borderRadius: new Animated.Value(25),
         backgroundColor: new Animated.Value(150)
+      },
+      postDetail: {
+        height: new Animated.Value(0),
+        width: new Animated.Value(0),
+        opacity: new Animated.Value(0),
+        postOp: new Animated.Value(0),
+        content: `Lorem ipsum dolor sit amet, prima putent et pri. His apeirian urbanitas rationibus ex. Atqui admodum eleifend mea ad. Mutat dicunt cu per, intellegat mnesarchum ei usu. Cu mei quando legere torquatos.
+        Nemore commune mel ei. Qui ut commune imperdiet, ponderum maluisset forensibus his cu, vix labores eligendi mandamus ea. Pri te primis intellegam, eu est congue graece voluptua. Populo alterum ne per, legere eligendi salutatus an mea, qui ei quas sententiae. Quo no nihil recusabo.Lorem ipsum dolor sit amet, prima putent et pri. His apeirian urbanitas rationibus ex. Atqui admodum eleifend mea ad. Mutat dicunt cu per, intellegat mnesarchum ei usu. Cu mei quando legere torquatos.
+        Nemore commune mel ei. Qui ut commune imperdiet, ponderum maluisset forensibus his cu, vix labores eligendi mandamus ea. Pri te primis intellegam, eu est congue graece voluptua. Populo alterum ne per, legere eligendi salutatus an mea, qui ei quas sententiae. Quo no nihil recusabo.Lorem ipsum dolor sit amet, prima putent et pri. His apeirian urbanitas rationibus ex. Atqui admodum eleifend mea ad. Mutat dicunt cu per, intellegat mnesarchum ei usu. Cu mei quando legere torquatos.
+        Nemore commune mel ei. Qui ut commune imperdiet, ponderum maluisset forensibus his cu, vix labores eligendi mandamus ea. Pri te primis intellegam, eu est congue graece voluptua. Populo alterum ne per, legere eligendi salutatus an mea, qui ei quas sententiae. Quo no nihil recusabo.`,
+        time: "9:30 PM",
+        monthYear: "Sep'18",
+        date: "31st",
+        title: "How to make things GO Viral",
+        live: true
       },
       mainCards: [
         {
@@ -140,6 +156,50 @@ export default class Home extends Component {
         easing: Easing.quad
       })
     ]).start();
+  };
+
+  expandPost = () => {
+    this.setState({ showPostDetail: true });
+    Animated.parallel([
+      Animated.timing(this.state.postDetail.height, {
+        toValue: hp("100%"),
+        easing: Easing.quad
+      }),
+      Animated.timing(this.state.postDetail.width, {
+        toValue: wp("100%"),
+        easing: Easing.quad
+      }),
+      Animated.timing(this.state.postDetail.opacity, {
+        toValue: 1,
+        easing: Easing.quad
+      }),
+      Animated.timing(this.state.postDetail.postOp, {
+        toValue: 1,
+        delay: 500,
+        duration: 250,
+        easing: Easing.quad
+      })
+    ]).start();
+  };
+  hidePost = () => {
+    Animated.stagger(250, [
+      Animated.timing(this.state.postDetail.postOp, {
+        toValue: 0,
+        duration: 250
+      }),
+      Animated.timing(this.state.postDetail.height, {
+        toValue: 0
+      }),
+      Animated.timing(this.state.postDetail.width, {
+        toValue: 0
+      }),
+      Animated.timing(this.state.postDetail.opacity, {
+        toValue: 0
+      })
+    ]).start();
+    setTimeout(() => {
+      this.setState({ showPostDetail: false });
+    }, 700);
   };
   render() {
     const interpolateSearchBarColor = this.state.searchBar.backgroundColor.interpolate(
@@ -252,6 +312,7 @@ export default class Home extends Component {
                   header={item.header}
                   footer={item.footer}
                   live={item.live}
+                  onPress={this.expandPost}
                 />
               )}
             />
@@ -271,6 +332,29 @@ export default class Home extends Component {
             />
           </SafeAreaView>
         </Content>
+        {this.state.showPostDetail ? (
+          <Animated.View
+            style={{
+              position: "absolute",
+              alignSelf: "center",
+              height: this.state.postDetail.height,
+              width: this.state.postDetail.width,
+              opacity: this.state.postDetail.opacity,
+              backgroundColor: "#f8f8f8"
+            }}
+          >
+            <PostDetail
+              continue={this.hidePost}
+              content={this.state.postDetail.content}
+              time={this.state.postDetail.time}
+              monthYear={this.state.postDetail.monthYear}
+              date={this.state.postDetail.date}
+              title={this.state.postDetail.title}
+              opacity={this.state.postDetail.postOp}
+              live={this.state.postDetail.live}
+            />
+          </Animated.View>
+        ) : null}
       </Container>
     );
   }

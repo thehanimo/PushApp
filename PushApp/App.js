@@ -183,7 +183,11 @@ const RootStack = createAnimatedSwitchNavigator(
 );
 function SafeAreaMaterialTopTabBar(props) {
   return (
-    <SafeAreaView>
+    <SafeAreaView
+      style={{
+        zIndex: -1
+      }}
+    >
       <MaterialTopTabBar {...props} />
     </SafeAreaView>
   );
