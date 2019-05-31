@@ -10,13 +10,13 @@ A No BS Platform for Entrepreneurs.
 
 |── **NavigationService.js**
 
-|── \_\_tests\*\*
+|── **\_\_tests\_\_**
 
 |── android
 
 |── **app**
 
-|     ├── \*\*Components\_\_
+|     ├── **Components**
 
 |     └── assets
 
