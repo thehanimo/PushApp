@@ -42,8 +42,6 @@ A No BS Platform for Entrepreneurs.
 
 ## Modules
 
----
-
 ### App.js
 
 Entrypoint for the app. Routes and Navigation are defined here.
