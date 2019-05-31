@@ -80,7 +80,7 @@ Contains all of the components used in PushApp. Each component has its own style
 
 #### Landing
 
-The whole screen is wrapped in a Content (Header and Footer are skipped almost everywhere) under Container (as reccommended by `native-base`). This is in turn wrapped in a SafeAreaView to accomodate the newer screen sizes (and notches).
+The whole screen is wrapped in a Content (Header and Footer are skipped almost everywhere) under Container (as recommended by `native-base`). This is in turn wrapped in a SafeAreaView to accomodate the newer screen sizes (and notches).
 There are three image-header AnimatedViews. All of them have their initial positions set in the state variable along with opacities (in a list, the indices of which will correspond to different screens). This helps us perform animated switches between them using the TouchableOpacity on the screen. There is a screen indicator (we'll call it a navbar) below these views which undergoes a subtle transition as well. Various functions are used to manage the transitions. The show() and hide() functions take in the state variables for position(x), opacity(op), and the width of the active navbar(navbar). The navbar is basically three fixed views with a lighter color on which three darker, active colored views are superimposed and whose width are animated from 0 to their full width.
 Move() takes in the page offset and performs the required transition (pressing on the navbar switches screens too which complicates things for 2 page transitions) and the NavMove takes care of the navbar toggle. The icon on the button also udergoes a transition when it reaches the last screen. componentDidMount() animates the first screen.
 
