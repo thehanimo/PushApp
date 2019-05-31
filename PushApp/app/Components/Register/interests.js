@@ -57,15 +57,6 @@ export default class Interests extends Component<Props> {
       ContinueButOpacity: new Animated.Value(1),
       searchOverlay: false,
       transitioning: false,
-      profile: {
-        image: { uri: null },
-        id: null,
-        fullName: null,
-        email: null,
-        phone: null,
-        city: null,
-        referral: null
-      },
       selectedInterests: [],
       interests: []
     };

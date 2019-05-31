@@ -96,8 +96,6 @@ export default class Landing extends Component<Props> {
     ]).start();
   };
 
-  MoveTwo = i => {};
-
   Move = (i, dur = 500) => {
     if (this.state.currentPage == 2 && i > 0) {
       NavigationService.navigate("login");
