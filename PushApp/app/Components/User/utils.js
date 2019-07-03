@@ -275,197 +275,195 @@ export class PostDetail extends Component {
   }
   render() {
     return (
-      <Animated.View style={{ opacity: this.props.opacity, height: "100%" }}>
-        <SafeAreaView>
-          <View
+      <SafeAreaView>
+        <View
+          style={{
+            width: wp("100%"),
+            height: wp("52%")
+          }}
+        >
+          <Image
+            source={require("../../assets/images/eventSample.jpg")}
             style={{
-              width: wp("100%"),
-              height: wp("52%")
-            }}
-          >
-            <Image
-              source={require("../../assets/images/eventSample.jpg")}
-              style={{
-                width: "100%",
-                height: "100%",
-                resizeMode: "cover"
-              }}
-            />
-          </View>
-          <View>
-            <Text
-              style={{
-                fontFamily: "Poppins-Medium",
-                fontSize: 24,
-                color: "#2a3455",
-                marginLeft: 16,
-                marginRight: 110,
-                marginTop: 10
-              }}
-            >
-              {this.props.title}
-            </Text>
-            <View
-              style={{
-                margin: 5,
-                position: "absolute",
-                top: 10,
-                right: 0,
-                height: 56,
-                width: 56,
-                backgroundColor: "#865ed0",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "Poppins-Light",
-                  fontSize: 14,
-                  color: "#fff"
-                }}
-                allowFontScaling={false}
-              >
-                {this.props.date}
-              </Text>
-              <Text
-                style={{
-                  fontFamily: "Poppins-SemiBold",
-                  fontSize: 15,
-                  color: "#fff"
-                }}
-                allowFontScaling={false}
-              >
-                {this.props.monthYear}
-              </Text>
-            </View>
-          </View>
-          <View style={{ height: 30 }}>
-            <View
-              style={{
-                marginLeft: 16,
-                flex: 1,
-                flexDirection: "row",
-                justifyContent: "flex-start"
-              }}
-            >
-              <Text
-                style={{
-                  fontFamily: "Poppins-Light",
-                  fontSize: 16,
-                  color: "#707070"
-                }}
-                allowFontScaling={false}
-              >
-                {this.props.time}
-              </Text>
-              <View
-                style={{
-                  borderLeftColor: "#B7B7B7",
-                  borderLeftWidth: 1,
-                  height: 24,
-                  marginLeft: 10,
-                  marginRight: 10
-                }}
-              />
-              {this.props.live ? (
-                <View
-                  style={{
-                    backgroundColor: "red",
-                    width: 54,
-                    height: 24,
-                    justifyContent: "center",
-                    alignItems: "flex-end"
-                  }}
-                >
-                  <View
-                    style={{
-                      width: 12,
-                      height: 12,
-                      borderRadius: 6,
-                      backgroundColor: "#fff",
-                      position: "absolute",
-                      left: 5,
-                      top: 5
-                    }}
-                  />
-                  <Text
-                    style={{
-                      color: "#fff",
-                      fontFamily: "Poppins-Medium",
-                      fontSize: 14,
-                      marginRight: 5
-                    }}
-                    allowFontScaling={false}
-                  >
-                    LIVE
-                  </Text>
-                </View>
-              ) : null}
-            </View>
-          </View>
-          <View
-            style={{
-              width: wp("100%") - 32,
-              borderBottomColor: "#d7d7d7",
-              borderBottomWidth: 1,
-              marginTop: 30,
-              alignSelf: "center"
+              width: "100%",
+              height: "100%",
+              resizeMode: "cover"
             }}
           />
-          <ScrollView
+        </View>
+        <View>
+          <Text
             style={{
-              height: hp("35%")
+              fontFamily: "Poppins-Medium",
+              fontSize: 24,
+              color: "#2a3455",
+              marginLeft: 16,
+              marginRight: 110,
+              marginTop: 10
+            }}
+          >
+            {this.props.title}
+          </Text>
+          <View
+            style={{
+              margin: 5,
+              position: "absolute",
+              top: 10,
+              right: 0,
+              height: 56,
+              width: 56,
+              backgroundColor: "#865ed0",
+              justifyContent: "center",
+              alignItems: "center"
             }}
           >
             <Text
               style={{
                 fontFamily: "Poppins-Light",
                 fontSize: 14,
-                color: "#707070",
-                textAlign: "left",
-                marginLeft: 16,
-                marginRight: 16,
-                marginTop: 30
+                color: "#fff"
               }}
+              allowFontScaling={false}
             >
-              {this.props.content}
+              {this.props.date}
             </Text>
-          </ScrollView>
+            <Text
+              style={{
+                fontFamily: "Poppins-SemiBold",
+                fontSize: 15,
+                color: "#fff"
+              }}
+              allowFontScaling={false}
+            >
+              {this.props.monthYear}
+            </Text>
+          </View>
+        </View>
+        <View style={{ height: 30 }}>
           <View
             style={{
-              position: "relative",
+              marginLeft: 16,
+              flex: 1,
+              flexDirection: "row",
+              justifyContent: "flex-start"
+            }}
+          >
+            <Text
+              style={{
+                fontFamily: "Poppins-Light",
+                fontSize: 16,
+                color: "#707070"
+              }}
+              allowFontScaling={false}
+            >
+              {this.props.time}
+            </Text>
+            <View
+              style={{
+                borderLeftColor: "#B7B7B7",
+                borderLeftWidth: 1,
+                height: 24,
+                marginLeft: 10,
+                marginRight: 10
+              }}
+            />
+            {this.props.live ? (
+              <View
+                style={{
+                  backgroundColor: "red",
+                  width: 54,
+                  height: 24,
+                  justifyContent: "center",
+                  alignItems: "flex-end"
+                }}
+              >
+                <View
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: 6,
+                    backgroundColor: "#fff",
+                    position: "absolute",
+                    left: 5,
+                    top: 5
+                  }}
+                />
+                <Text
+                  style={{
+                    color: "#fff",
+                    fontFamily: "Poppins-Medium",
+                    fontSize: 14,
+                    marginRight: 5
+                  }}
+                  allowFontScaling={false}
+                >
+                  LIVE
+                </Text>
+              </View>
+            ) : null}
+          </View>
+        </View>
+        <View
+          style={{
+            width: wp("100%") - 32,
+            borderBottomColor: "#d7d7d7",
+            borderBottomWidth: 1,
+            marginTop: 30,
+            alignSelf: "center"
+          }}
+        />
+        <ScrollView
+          style={{
+            height: hp("35%")
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: "Poppins-Light",
+              fontSize: 14,
+              color: "#707070",
+              textAlign: "left",
+              marginLeft: 16,
+              marginRight: 16,
               marginTop: 30
             }}
           >
-            <TouchableOpacity
-              style={{
-                width: wp("90%"),
-                alignSelf: "center",
-                marginTop: 0,
-                height: 55,
-                elevation: 2,
-                borderRadius: 8,
-                shadowColor: "rgba(134, 94, 208, 1)",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.5,
-                shadowRadius: 2,
-                backgroundColor: "#865ed0",
-                justifyContent: "center",
-                alignItems: "center"
-              }}
-              onPress={this.props.continue}
+            {this.props.content}
+          </Text>
+        </ScrollView>
+        <View
+          style={{
+            position: "relative",
+            marginTop: 30
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              width: wp("90%"),
+              alignSelf: "center",
+              marginTop: 0,
+              height: 55,
+              elevation: 2,
+              borderRadius: 8,
+              shadowColor: "rgba(134, 94, 208, 1)",
+              shadowOffset: { width: 0, height: 2 },
+              shadowOpacity: 0.5,
+              shadowRadius: 2,
+              backgroundColor: "#865ed0",
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+            onPress={this.props.continue}
+          >
+            <Text
+              style={{ color: "#fff", fontFamily: "Poppins-Regular" }}
+              allowFontScaling={false}
             >
-              <Text
-                style={{ color: "#fff", fontFamily: "Poppins-Regular" }}
-                allowFontScaling={false}
-              >
-                Continue
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </SafeAreaView>
-      </Animated.View>
+              Continue
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
     );
   }
 }

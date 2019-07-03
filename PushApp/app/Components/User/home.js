@@ -11,7 +11,8 @@ import {
   Animated,
   Easing,
   ScrollView,
-  FlatList
+  FlatList,
+  Modal
 } from "react-native";
 import {
   widthPercentageToDP as wp,
@@ -160,46 +161,9 @@ export default class Home extends Component {
 
   expandPost = () => {
     this.setState({ showPostDetail: true });
-    Animated.parallel([
-      Animated.timing(this.state.postDetail.height, {
-        toValue: hp("100%"),
-        easing: Easing.quad
-      }),
-      Animated.timing(this.state.postDetail.width, {
-        toValue: wp("100%"),
-        easing: Easing.quad
-      }),
-      Animated.timing(this.state.postDetail.opacity, {
-        toValue: 1,
-        easing: Easing.quad
-      }),
-      Animated.timing(this.state.postDetail.postOp, {
-        toValue: 1,
-        delay: 500,
-        duration: 250,
-        easing: Easing.quad
-      })
-    ]).start();
   };
   hidePost = () => {
-    Animated.stagger(250, [
-      Animated.timing(this.state.postDetail.postOp, {
-        toValue: 0,
-        duration: 250
-      }),
-      Animated.timing(this.state.postDetail.height, {
-        toValue: 0
-      }),
-      Animated.timing(this.state.postDetail.width, {
-        toValue: 0
-      }),
-      Animated.timing(this.state.postDetail.opacity, {
-        toValue: 0
-      })
-    ]).start();
-    setTimeout(() => {
-      this.setState({ showPostDetail: false });
-    }, 700);
+    this.setState({ showPostDetail: false });
   };
   render() {
     const interpolateSearchBarColor = this.state.searchBar.backgroundColor.interpolate(
@@ -332,17 +296,14 @@ export default class Home extends Component {
             />
           </SafeAreaView>
         </Content>
-        {this.state.showPostDetail ? (
-          <Animated.View
-            style={{
-              position: "absolute",
-              alignSelf: "center",
-              height: this.state.postDetail.height,
-              width: this.state.postDetail.width,
-              opacity: this.state.postDetail.opacity,
-              backgroundColor: "#f8f8f8"
-            }}
-          >
+        <Modal
+          visible={this.state.showPostDetail}
+          onDismiss={this.hidePost}
+          onRequestClose={this.hidePost}
+          animationType="slide"
+          hardwareAccelerated
+        >
+          <SafeAreaView style={{ flex: 1 }}>
             <PostDetail
               continue={this.hidePost}
               content={this.state.postDetail.content}
@@ -353,8 +314,8 @@ export default class Home extends Component {
               opacity={this.state.postDetail.postOp}
               live={this.state.postDetail.live}
             />
-          </Animated.View>
-        ) : null}
+          </SafeAreaView>
+        </Modal>
       </Container>
     );
   }
